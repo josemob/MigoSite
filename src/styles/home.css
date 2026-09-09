@@ -1,0 +1,439 @@
+/* ============================================================
+   Landing Migo — "Cuida a quien te cuida"
+   Traducción del frame de Figma "MacBook Pro 14 - 1" (node 1:2)
+   ============================================================ */
+
+.mgo {
+  font-family: var(--font-sans);
+  color: var(--morado-deep);
+  background: #fff;
+  overflow-x: hidden;
+}
+
+.mgo__wrap {
+  width: 100%;
+  max-width: 1432px;
+  margin-inline: auto;
+  padding-inline: 40px;
+}
+
+/* ---------- Hero ---------- */
+.mgo-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background: radial-gradient(
+    120% 130% at 88% 8%,
+    #8a2fa0 0%,
+    #632273 48%,
+    #4f1b5d 74%,
+    #3b1446 100%
+  );
+  overflow: hidden;
+}
+
+.mgo-hero .mgo__wrap {
+  width: 100%;
+}
+
+.mgo-hero__photo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 62%;
+  max-width: 1050px;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+  pointer-events: none;
+}
+
+/* Navbar sticky flotante (se oculta al bajar, aparece al subir) */
+.mgo-nav-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  padding-top: 24px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.mgo-nav-bar.is-hidden {
+  transform: translateY(-160%);
+}
+
+.mgo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 10px 20px;
+  box-shadow: var(--shadow);
+}
+
+.mgo-nav__logo {
+  height: 40px;
+  width: auto;
+}
+
+.mgo-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mgo-nav__link {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--morado-deep);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mgo-nav__link:hover {
+  background: #f2eee9;
+}
+
+.mgo-nav__link.is-current {
+  background: #f2eee9;
+}
+
+.mgo-nav__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: var(--morado);
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mgo-nav__cta:hover {
+  background: var(--morado-600);
+}
+
+.mgo-nav__toggle {
+  display: none;
+}
+
+/* Contenido del hero */
+.mgo-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+  padding-block: 120px;
+}
+
+.mgo-hero__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(44px, 6vw, 78px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.mgo-hero__text {
+  margin: 25px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 460px;
+  color: rgb(255 255 255 / 90%);
+}
+
+/* ---------- Sección "Tu mejor amigo" ---------- */
+.mgo-why {
+  padding-block: 96px;
+  background: #fff;
+}
+
+.mgo-why__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.mgo-why__col {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.mgo-why__head {
+  text-align: center;
+}
+
+.mgo-why__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 49px;
+  line-height: 1.08;
+  color: #111;
+}
+
+.mgo-why__sub {
+  margin: 12px 0 0;
+  font-weight: 300;
+  font-size: 31px;
+  letter-spacing: 8px;
+  color: rgb(0 0 0 / 49%);
+}
+
+.mgo-why__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #111;
+}
+
+/* placeholder de imagen (foto pendiente) */
+.mgo-ph {
+  background: var(--morado-claro);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(138 47 160 / 55%);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mgo-ph--440 {
+  height: 440px;
+}
+
+/* ---------- Sección "Tres pasos" ---------- */
+.mgo-steps {
+  padding-block: 96px 100px;
+  background: #fff;
+}
+
+.mgo-steps__head {
+  text-align: center;
+  max-width: 900px;
+  margin-inline: auto;
+  margin-bottom: 48px;
+}
+
+.mgo-steps__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+  color: #111;
+}
+
+.mgo-steps__sub {
+  margin: 12px 0 0;
+  font-size: 16px;
+  color: #111;
+}
+
+.mgo-steps__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.mgo-step {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background: #fff;
+  border: 1px solid var(--morado);
+  border-radius: var(--radius-lg);
+  padding: 24px 10px 10px;
+}
+
+.mgo-step__body {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  padding-inline: 10px;
+}
+
+.mgo-step__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 7px;
+  background: var(--amarillo);
+  color: var(--morado);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.mgo-step__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.33;
+  color: #000;
+}
+
+.mgo-step__text {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.mgo-step .mgo-ph {
+  height: 244px;
+  border-radius: 8px;
+}
+
+/* ---------- Sección "Veterinario en tu bolsillo" ---------- */
+.mgo-ai {
+  position: relative;
+  background: #f2f2f7;
+  overflow: hidden;
+  padding-block: 120px;
+}
+
+.mgo-ai__bubbles {
+  position: absolute;
+  top: 40px;
+  right: 4%;
+  width: min(739px, 55%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.mgo-ai__content {
+  position: relative;
+  z-index: 2;
+  margin-left: auto;
+  max-width: 623px;
+  display: flex;
+  flex-direction: column;
+  gap: 37px;
+}
+
+.mgo-ai__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+  color: #000;
+}
+
+.mgo-ai__text {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.mgo-ai__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 21px;
+}
+
+.mgo-chip {
+  background: #fff;
+  border-radius: 41px;
+  padding: 6px 14px;
+  font-size: 16px;
+  color: var(--morado-deep);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Footer mínimo (el frame no lo incluye) ---------- */
+.mgo-footer {
+  background: var(--morado-deep);
+  color: rgb(255 255 255 / 80%);
+  padding-block: 40px;
+}
+
+.mgo-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.mgo-footer__brand {
+  font-weight: 800;
+  font-size: 24px;
+  color: #fff;
+}
+
+.mgo-footer__copy {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 960px) {
+  .mgo__wrap {
+    padding-inline: 20px;
+  }
+
+  .mgo-hero {
+    min-height: auto;
+    display: block;
+  }
+
+  .mgo-hero__photo {
+    position: relative;
+    width: 100%;
+    top: 0;
+    height: auto;
+    margin-top: 24px;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .mgo-hero__content {
+    padding: 96px 0 32px;
+    max-width: none;
+  }
+
+  .mgo-why__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .mgo-steps__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mgo-ai__bubbles {
+    display: none;
+  }
+
+  .mgo-ai {
+    padding-block: 72px;
+  }
+
+  .mgo-ai__content {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .mgo-nav__links {
+    display: none;
+  }
+}

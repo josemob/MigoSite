@@ -8,8 +8,10 @@ import NotFound from './pages/NotFound.jsx'
 export default function App() {
   return (
     <Routes>
+      {/* Landing full-bleed, autocontenida (su propio navbar/footer) */}
+      <Route index element={<Home />} />
+      {/* Resto del sitio con el layout compartido */}
       <Route element={<Layout />}>
-        <Route index element={<Home />} />
         <Route path="nosotros" element={<About />} />
         <Route path="contacto" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
