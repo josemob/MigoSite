@@ -21,6 +21,32 @@ const STEPS = [
 
 const AI_CHIPS = ['Detecta urgencias', 'Conoce a tu mascota', 'Agenda por ti']
 
+const PARTNERS = ['VetSalud', 'PetCare', 'AnimalCenter', 'ZooMart', 'VidaPet']
+
+const TESTIMONIALS = [
+  {
+    quote:
+      'Cuando mi gato se puso mal de madrugada, Migo me dijo qué hacer y me conectó con una clínica abierta. Nos salvó la noche.',
+    name: 'María G.',
+    role: 'Dueña de Michi',
+    initial: 'M',
+  },
+  {
+    quote:
+      'Tener el expediente y las vacunas siempre a mano cambió por completo cómo cuido a mi perro.',
+    name: 'Carlos R.',
+    role: 'Dueño de Rocco',
+    initial: 'C',
+  },
+  {
+    quote:
+      'La teleconsulta me ahorró un viaje innecesario. Atención cálida, clara y al instante.',
+    name: 'Ana P.',
+    role: 'Dueña de Luna',
+    initial: 'A',
+  },
+]
+
 export default function Home() {
   const [navHidden, setNavHidden] = useState(false)
 
@@ -127,7 +153,7 @@ export default function Home() {
       </section>
 
       {/* ---------- VETERINARIO EN TU BOLSILLO ---------- */}
-      <section className="mgo-ai" id="unete">
+      <section className="mgo-ai" id="ia">
         <img className="mgo-ai__bubbles" src="/img/bubbles.svg" alt="" aria-hidden="true" />
         <div className="mgo__wrap">
           <div className="mgo-ai__content">
@@ -148,6 +174,68 @@ export default function Home() {
                 </span>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- ALIADOS ---------- */}
+      <section className="mgo-partners">
+        <div className="mgo__wrap">
+          <p className="mgo-partners__cap">CLÍNICAS Y COMERCIOS ALIADOS</p>
+          <div className="mgo-partners__row">
+            {PARTNERS.map((p) => (
+              <span className="mgo-partners__logo" key={p}>
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- TESTIMONIOS ---------- */}
+      <section className="mgo-tst">
+        <div className="mgo__wrap">
+          <div className="mgo-tst__head">
+            <h2 className="mgo-tst__title">Lo que dicen las familias Migo</h2>
+            <p className="mgo-tst__sub">
+              Miles de mascotas mejor cuidadas, un momento a la vez.
+            </p>
+          </div>
+          <div className="mgo-tst__grid">
+            {TESTIMONIALS.map((t) => (
+              <article className="mgo-tst__card" key={t.name}>
+                <p className="mgo-tst__quote">“{t.quote}”</p>
+                <div className="mgo-tst__person">
+                  <span className="mgo-tst__avatar">{t.initial}</span>
+                  <div>
+                    <p className="mgo-tst__name">{t.name}</p>
+                    <p className="mgo-tst__role">{t.role}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- ÚNETE / REGISTRO ---------- */}
+      <section className="mgo-cta" id="unete">
+        <div className="mgo__wrap">
+          <p className="mgo-cta__eyebrow">ÚNETE A LA MANADA MIGO</p>
+          <h2 className="mgo-cta__title">
+            Cuida, conecta y crece con Migo
+          </h2>
+          <p className="mgo-cta__text">
+            Crea tu cuenta gratis y ten a tu mascota más protegida. ¿Eres clínica,
+            veterinario o comercio? Afíliate y haz crecer tu práctica.
+          </p>
+          <div className="mgo-cta__actions">
+            <a className="mgo-btn mgo-btn--amarillo" href="#">
+              Crear cuenta gratis
+            </a>
+            <a className="mgo-btn mgo-btn--ghost" href="#">
+              Afiliar mi negocio
+            </a>
           </div>
         </div>
       </section>

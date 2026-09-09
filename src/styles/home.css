@@ -382,6 +382,196 @@
   font-size: 14px;
 }
 
+/* ---------- Aliados ---------- */
+.mgo-partners {
+  background: #fff;
+  padding-block: 56px;
+}
+
+.mgo-partners__cap {
+  margin: 0 0 28px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--color-text-muted);
+}
+
+.mgo-partners__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+}
+
+.mgo-partners__logo {
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--morado);
+  opacity: 0.32;
+}
+
+/* ---------- Testimonios ---------- */
+.mgo-tst {
+  background: var(--morado-claro);
+  padding-block: 96px;
+}
+
+.mgo-tst__head {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 48px;
+}
+
+.mgo-tst__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 40px);
+  line-height: 1.1;
+  color: #111;
+}
+
+.mgo-tst__sub {
+  margin: 12px 0 0;
+  font-size: 17px;
+  color: var(--color-text-muted);
+}
+
+.mgo-tst__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.mgo-tst__card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 26px;
+  box-shadow: var(--shadow);
+}
+
+.mgo-tst__quote {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.mgo-tst__person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mgo-tst__avatar {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--morado);
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mgo-tst__name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1e293b;
+}
+
+.mgo-tst__role {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- CTA Únete / registro ---------- */
+.mgo-cta {
+  padding-block: 100px;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(
+    120% 140% at 50% 0%,
+    #8a2fa0 0%,
+    #6e2681 55%,
+    #3b1446 100%
+  );
+}
+
+.mgo-cta__eyebrow {
+  margin: 0 0 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  font-size: 13px;
+  color: var(--amarillo);
+}
+
+.mgo-cta__title {
+  margin: 0 auto;
+  max-width: 760px;
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 52px);
+  line-height: 1.08;
+}
+
+.mgo-cta__text {
+  margin: 18px auto 0;
+  max-width: 560px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 88%);
+}
+
+.mgo-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.mgo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.mgo-btn--amarillo {
+  background: var(--amarillo);
+  color: var(--morado-deep);
+}
+
+.mgo-btn--amarillo:hover {
+  filter: brightness(1.05);
+}
+
+.mgo-btn--ghost {
+  background: transparent;
+  border-color: rgb(255 255 255 / 55%);
+  color: #fff;
+}
+
+.mgo-btn--ghost:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
 /* ============================================================
    Responsive
    ============================================================ */
@@ -429,6 +619,24 @@
 
   .mgo-ai__content {
     max-width: none;
+  }
+
+  .mgo-tst__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mgo-partners__row {
+    gap: 28px 40px;
+  }
+
+  .mgo-cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mgo-tst,
+  .mgo-cta {
+    padding-block: 72px;
   }
 }
 
