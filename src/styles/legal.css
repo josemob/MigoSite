@@ -1,0 +1,84 @@
+/* Páginas legales: texto largo que hay que poder leer de corrido. */
+
+.legal {
+  max-width: 68ch;
+  color: var(--color-text-muted);
+}
+
+.legal p,
+.legal ul,
+.legal ol {
+  margin: 0 0 var(--space-3);
+}
+
+.legal strong {
+  color: var(--color-text);
+}
+
+.legal h3 {
+  margin: var(--space-5) 0 var(--space-2);
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.legal ul,
+.legal ol {
+  padding-inline-start: 1.25rem;
+}
+
+.legal li {
+  margin-bottom: var(--space-1);
+}
+
+.legal a {
+  color: var(--color-brand);
+}
+
+/* Aviso al pie de una sección: menor, pero sin perder contraste. */
+.legal__nota {
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border-inline-start: 3px solid var(--color-brand);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: var(--text-sm);
+}
+
+/* Marca los datos del responsable que faltan por completar. Es deliberadamente
+   chillón: publicar la política con esto visible haría que Play rechace la ficha. */
+.legal__falta {
+  background: #ffe8a3;
+  color: #6b4e00;
+  padding: 0.05em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* La tabla de datos puede desbordar en móvil: se desplaza sola, sin arrastrar
+   consigo el resto de la página. */
+.legal__tabla-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-3);
+}
+
+.legal__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  min-width: 34rem;
+}
+
+.legal__tabla th,
+.legal__tabla td {
+  text-align: start;
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.legal__tabla th {
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: nowrap;
+}

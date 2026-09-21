@@ -3,6 +3,8 @@ import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
+import Privacidad from './pages/Privacidad.jsx'
+import EliminarCuenta from './pages/EliminarCuenta.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -14,6 +16,10 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="nosotros" element={<About />} />
         <Route path="contacto" element={<Contact />} />
+        {/* Rutas exigidas por Google Play: la política y la solicitud de
+            borrado tienen que ser accesibles sin instalar la app. */}
+        <Route path="privacidad" element={<Privacidad />} />
+        <Route path="eliminar-cuenta" element={<EliminarCuenta />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
