@@ -27,6 +27,8 @@ const STEPS = [
   },
 ]
 
+// Cada servicio lleva su icono de línea (24x24, trazo) para que la fila se
+// reconozca antes de leerla.
 const SERVICIOS = [
   {
     id: 'emergencias',
@@ -34,6 +36,7 @@ const SERVICIOS = [
     text: 'Botón de urgencia, triaje con IA y ruteo a la clínica abierta más cercana.',
     img: '/servicios/01-emergencias.jpg',
     alt: 'Dueño llegando de urgencia a una clínica veterinaria con su perro',
+    icono: 'm13 2-8.5 11.5H11l-1 8.5L18.5 10.5H13z',
   },
   {
     id: 'teleconsulta',
@@ -41,6 +44,7 @@ const SERVICIOS = [
     text: 'Video con veterinarios verificados y récipe digital, sin salir de casa.',
     img: '/servicios/02-teleconsulta.jpg',
     alt: 'Señora en videoconsulta veterinaria con su gato al lado',
+    icono: 'M15 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3.5l6 4.5V6z',
   },
   {
     id: 'agenda',
@@ -48,6 +52,7 @@ const SERVICIOS = [
     text: 'Reserva en clínicas aliadas con recordatorios automáticos.',
     img: '/servicios/03-agenda.jpg',
     alt: 'Cita veterinaria agendada desde el teléfono',
+    icono: 'M4 6h16v15H4zM4 10.5h16M8.5 3v4M15.5 3v4',
   },
   {
     id: 'expediente',
@@ -55,6 +60,7 @@ const SERVICIOS = [
     text: 'Historial, vacunas y récipes de tu mascota, centralizados y siempre a mano.',
     img: '/servicios/04-expediente.jpg',
     alt: 'Cartilla de vacunación digital de una mascota',
+    icono: 'M6 3h8l4 4v14H6zM14 3v4h4M9.5 13h5M9.5 17h5',
   },
   {
     id: 'aliados',
@@ -62,6 +68,7 @@ const SERVICIOS = [
     text: 'Grooming y comercios de confianza cerca de ti, dentro de la misma app.',
     img: '/servicios/05-peluqueria.jpg',
     alt: 'Perro recién bañado en una peluquería canina',
+    icono: 'M6.5 4 17 17.5M17.5 4 7 17.5M6 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5M18 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
   },
 ]
 
@@ -286,22 +293,37 @@ export default function Home() {
               de tu mascota.
             </p>
           </div>
-          <div className="mgo-serv__grid">
+          {/* Lista: al pasar por encima (o al enfocar con teclado) cada fila
+              abre la foto del servicio. La altura de la fila no cambia, solo
+              el ancho de la foto, para que no salte lo que viene debajo. */}
+          <ul className="mgo-serv__lista">
             {SERVICIOS.map((s) => (
-              <article className="mgo-serv__card" key={s.id}>
-                <img
-                  className="mgo-serv__img"
-                  src={s.img}
-                  alt={s.alt}
-                  loading="lazy"
-                />
-                <div className="mgo-serv__body">
-                  <h3 className="mgo-serv__name">{s.title}</h3>
-                  <p className="mgo-serv__text">{s.text}</p>
-                </div>
-              </article>
+              <li key={s.id}>
+                <a className="mgo-serv__fila" href="#unete">
+                  <svg
+                    className="mgo-serv__icono"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d={s.icono} />
+                  </svg>
+                  <span className="mgo-serv__foto">
+                    <img src={s.img} alt={s.alt} loading="lazy" />
+                  </span>
+                  <span className="mgo-serv__txt">
+                    <span className="mgo-serv__name">{s.title}</span>
+                    <span className="mgo-serv__text">{s.text}</span>
+                  </span>
+                  <span className="mgo-serv__cta">Ver en la app</span>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

@@ -430,53 +430,144 @@
   color: var(--color-text-muted);
 }
 
-/* Cinco tarjetas: 3 + 2. Las dos últimas se centran solas gracias al
-   desplazamiento del primer elemento de la segunda fila. */
-.mgo-serv__grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 24px;
+.mgo-serv__lista {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1180px;
+  list-style: none;
+  border-top: 1px solid var(--color-border);
 }
 
-.mgo-serv__card {
-  grid-column: span 2;
+.mgo-serv__lista li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mgo-serv__fila {
   display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-radius: var(--radius-lg);
+  align-items: center;
+  gap: 22px;
+  min-height: 136px;
+  padding: 16px 8px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mgo-serv__icono {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  align-self: flex-start;
+  margin-top: 8px;
+  color: var(--morado);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* La foto vive plegada (ancho 0) y se abre al pasar por encima. Se anima el
+   ancho y no la altura: así la fila mide siempre lo mismo y no empuja lo que
+   tiene debajo. */
+.mgo-serv__foto {
+  flex: 0 0 auto;
+  width: 0;
+  height: 104px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: var(--shadow);
+  opacity: 0;
+  background: var(--morado-claro);
+  transition:
+    width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease 0.06s;
 }
 
-.mgo-serv__card:nth-child(4) {
-  grid-column: 2 / span 2;
-}
-
-.mgo-serv__img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
+.mgo-serv__foto img {
+  width: 184px;
+  height: 100%;
   object-fit: cover;
   display: block;
-  background: var(--morado-claro);
 }
 
-.mgo-serv__body {
-  padding: 22px 24px 26px;
+.mgo-serv__txt {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .mgo-serv__name {
-  margin: 0;
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 1.25;
-  color: var(--morado-deep);
+  display: block;
+  font-weight: 400;
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.1;
+  color: #111;
+  transition: color 0.3s ease;
 }
 
 .mgo-serv__text {
-  margin: 8px 0 0;
+  display: block;
+  margin-top: 8px;
+  max-width: 62ch;
   font-size: 16px;
   line-height: 1.5;
-  color: var(--color-text);
+  color: var(--color-text-muted);
+}
+
+.mgo-serv__cta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--morado-claro);
+  color: var(--morado);
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Un solo estado para ratón y teclado. */
+.mgo-serv__fila:hover .mgo-serv__foto,
+.mgo-serv__fila:focus-visible .mgo-serv__foto {
+  width: 184px;
+  opacity: 1;
+}
+
+.mgo-serv__fila:hover .mgo-serv__name,
+.mgo-serv__fila:focus-visible .mgo-serv__name {
+  color: var(--morado);
+}
+
+.mgo-serv__fila:hover .mgo-serv__icono,
+.mgo-serv__fila:focus-visible .mgo-serv__icono {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.mgo-serv__fila:hover .mgo-serv__cta,
+.mgo-serv__fila:focus-visible .mgo-serv__cta {
+  background: var(--morado);
+  color: #fff;
+}
+
+/* Sin ratón (táctil) el hover no existe: la foto se queda abierta siempre. */
+@media (hover: none) {
+  .mgo-serv__foto {
+    width: 128px;
+    opacity: 1;
+  }
+
+  .mgo-serv__foto img {
+    width: 128px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgo-serv__foto,
+  .mgo-serv__icono,
+  .mgo-serv__name,
+  .mgo-serv__cta {
+    transition: none;
+  }
 }
 
 /* ---------- Sección "Veterinario en tu bolsillo" ---------- */
@@ -813,18 +904,14 @@
     max-width: none;
   }
 
-  /* Dos por fila; la quinta ocupa el ancho completo. */
-  .mgo-serv__grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* Menos ancho disponible: la foto que se despliega se hace más chica. */
+  .mgo-serv__foto img {
+    width: 150px;
   }
 
-  .mgo-serv__card,
-  .mgo-serv__card:nth-child(4) {
-    grid-column: auto;
-  }
-
-  .mgo-serv__card:last-child {
-    grid-column: span 2;
+  .mgo-serv__fila:hover .mgo-serv__foto,
+  .mgo-serv__fila:focus-visible .mgo-serv__foto {
+    width: 150px;
   }
 
   .mgo-pro__grid {
@@ -849,12 +936,39 @@
     display: inline-flex;
   }
 
-  .mgo-serv__grid {
-    grid-template-columns: 1fr;
+  /* En el teléfono no hay hover que valga: la fila se desarma en bloque
+     (icono + título, texto, foto ancha y botón) y la foto se ve siempre. */
+  .mgo-serv__fila {
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    min-height: 0;
+    padding: 26px 4px;
   }
 
-  .mgo-serv__card:last-child {
-    grid-column: auto;
+  .mgo-serv__icono {
+    margin-top: 2px;
+  }
+
+  .mgo-serv__txt {
+    flex: 1 1 200px;
+  }
+
+  .mgo-serv__foto,
+  .mgo-serv__fila:hover .mgo-serv__foto {
+    order: 3;
+    flex: 1 1 100%;
+    width: auto;
+    height: 170px;
+    opacity: 1;
+  }
+
+  .mgo-serv__foto img {
+    width: 100%;
+  }
+
+  .mgo-serv__cta {
+    order: 4;
+    width: 100%;
   }
 
   .mgo-why__img {
