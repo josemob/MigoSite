@@ -346,15 +346,16 @@
   color: #111;
 }
 
-/* El tracking iba en 8px fijos: a 31px se leía suelto y en móvil partía la
-   línea. En em acompaña al tamaño. */
+/* Pasa a manuscrita: antes eran 31px con 8px de tracking, que en móvil partía
+   la línea y no decía nada. Ahora es el acento de la sección. */
 .mgo-why__sub {
-  margin: 14px 0 0;
-  font-weight: 400;
-  font-size: var(--t-h3);
-  line-height: var(--lh-h3);
-  letter-spacing: 0.2em;
-  color: rgb(0 0 0 / 46%);
+  margin: 10px 0 0;
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: calc(var(--t-h3) * 1.28);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--morado);
 }
 
 .mgo-why__text {
@@ -373,6 +374,217 @@
   border-radius: var(--radius-lg);
   background: var(--morado-claro);
   display: block;
+}
+
+/* Acento manuscrito. Caveat monta muy bajo respecto a Outfit, de ahí el
+   tamaño mayor y el desplazamiento vertical para que las dos líneas de base
+   coincidan. Se usa para UNA palabra dentro de un titular, nunca más. */
+.mgo-script {
+  font-family: var(--font-script);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.32em;
+  line-height: 0.8;
+  letter-spacing: 0;
+  color: var(--morado);
+  display: inline-block;
+  transform: translateY(0.06em);
+}
+
+/* ---------- Las dudas de la madrugada (tarjetas que giran) ---------- */
+.mgo-dudas {
+  background: var(--morado-900, #290e31);
+  color: #fff;
+  padding-block: 96px;
+  overflow: hidden;
+}
+
+.mgo-dudas__head {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 64px;
+}
+
+.mgo-dudas__title {
+  text-wrap: balance;
+  margin: 0;
+  font-weight: 400;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  color: #fff;
+}
+
+/* Sobre el morado profundo el acento va en amarillo: el morado 500 no tiene
+   contraste contra su propio fondo. */
+.mgo-dudas__title .mgo-script {
+  color: var(--amarillo);
+}
+
+.mgo-dudas__sub {
+  text-wrap: balance;
+  margin: 14px auto 0;
+  max-width: 46ch;
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: rgb(255 255 255 / 66%);
+}
+
+.mgo-dudas__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Cada tarjeta nace torcida y a distinta altura. La segunda cae más y gira
+   más que el resto para romper la fila, como en la referencia. */
+.mgo-duda {
+  transform: rotate(-3deg);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mgo-duda:nth-child(2) {
+  transform: rotate(5deg) translateY(26px);
+}
+
+.mgo-duda:nth-child(3) {
+  transform: rotate(-2deg) translateY(10px);
+}
+
+.mgo-duda:nth-child(4) {
+  transform: rotate(4deg) translateY(-6px);
+}
+
+/* Al acercarse, la tarjeta se endereza y se levanta. */
+.mgo-duda:hover,
+.mgo-duda:focus-within {
+  transform: rotate(0deg) translateY(-10px);
+}
+
+.mgo-duda__card {
+  display: block;
+  width: 100%;
+  height: 268px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 1200px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.mgo-duda__card:focus-visible {
+  outline: 3px solid var(--amarillo);
+  outline-offset: 6px;
+  border-radius: 24px;
+}
+
+.mgo-duda__flip {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mgo-duda__card.is-open .mgo-duda__flip {
+  transform: rotateY(180deg);
+}
+
+.mgo-duda__cara {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 24px;
+  backface-visibility: hidden;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 28%);
+}
+
+.mgo-duda__cara--dorso {
+  transform: rotateY(180deg);
+  justify-content: center;
+  gap: 10px;
+}
+
+.mgo-duda__eco {
+  font-size: var(--t-small);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.mgo-duda__card--morado .mgo-duda__cara {
+  background: #b98ad0;
+  color: var(--morado-deep);
+}
+
+.mgo-duda__card--oscuro .mgo-duda__cara {
+  background: #1d0a23;
+  color: #fff;
+}
+
+/* La flecha vive arriba a la derecha y gira cuando la tarjeta se abre. */
+.mgo-duda__flecha {
+  align-self: flex-end;
+  flex: 0 0 auto;
+  padding: 7px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--morado-deep);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mgo-duda__card.is-open .mgo-duda__flecha {
+  transform: rotate(90deg);
+}
+
+.mgo-duda__q {
+  margin-top: auto;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: var(--ls-h3);
+  text-wrap: balance;
+}
+
+/* En la oscura la pregunta va manuscrita y en amarillo, como el acento de la
+   referencia: es la tarjeta que rompe la fila. */
+.mgo-duda__card--oscuro .mgo-duda__q {
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 0.96;
+  color: var(--amarillo);
+}
+
+.mgo-duda__a {
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mgo-duda,
+  .mgo-duda__flip,
+  .mgo-duda__flecha {
+    transition: none;
+  }
+
+  /* Sin giro: la respuesta se cambia de golpe, sin animación. */
+  .mgo-duda {
+    transform: none;
+  }
 }
 
 /* ---------- Sección "Tres pasos" ---------- */
@@ -991,6 +1203,16 @@
     grid-template-columns: 1fr;
   }
 
+  /* Dos por fila: a cuatro columnas las preguntas se partían en cinco líneas. */
+  .mgo-dudas__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .mgo-dudas {
+    padding-block: 72px;
+  }
+
   .mgo-ai__bubbles {
     display: none;
   }
@@ -1068,6 +1290,37 @@
   .mgo-serv__cta {
     order: 4;
     width: 100%;
+  }
+
+  /* Una por fila y rectas: en un teléfono las tarjetas torcidas se pisan y
+     dejan huecos a los lados. */
+  .mgo-dudas__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .mgo-duda,
+  .mgo-duda:nth-child(2),
+  .mgo-duda:nth-child(3),
+  .mgo-duda:nth-child(4) {
+    transform: none;
+  }
+
+  .mgo-duda:hover,
+  .mgo-duda:focus-within {
+    transform: translateY(-4px);
+  }
+
+  .mgo-duda__card {
+    height: 186px;
+  }
+
+  .mgo-duda__q {
+    font-size: 24px;
+  }
+
+  .mgo-duda__card--oscuro .mgo-duda__q {
+    font-size: 38px;
   }
 
   .mgo-why__img {

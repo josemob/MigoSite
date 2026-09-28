@@ -1,11 +1,12 @@
 /* Design tokens — cambia aquí los colores/tipografía y se propaga a todo el sitio. */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   /* Marca Migo */
   --morado: #8a2fa0;
   --morado-600: #6e2681;
   --morado-deep: #3b1446;
+  --morado-900: #290e31;
   --morado-claro: #f5ebfa;
   --amarillo: #f6de1e;
   --verde: #2ea84f;
@@ -24,6 +25,10 @@
   /* Tipografía */
   --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
+
+  /* Acento manuscrito. Se usa SOLO para subrayar una palabra dentro de un
+     titular, nunca para texto corrido ni para un titular entero. */
+  --font-script: 'Caveat', 'Segoe Script', cursive;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.25rem;

@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import {
+  ArrowUpRight,
+  CalendarBlank,
+  FileText,
+  Lightning,
+  Scissors,
+  VideoCamera,
+} from '@phosphor-icons/react'
 import { LEGAL_LINKS, STORE } from '../config/site.js'
 import '../styles/home.css'
 
@@ -27,8 +35,6 @@ const STEPS = [
   },
 ]
 
-// Cada servicio lleva su icono de línea (24x24, trazo) para que la fila se
-// reconozca antes de leerla.
 const SERVICIOS = [
   {
     id: 'emergencias',
@@ -36,7 +42,7 @@ const SERVICIOS = [
     text: 'Botón de urgencia, triaje con IA y ruteo a la clínica abierta más cercana.',
     img: '/servicios/01-emergencias.jpg',
     alt: 'Dueño llegando de urgencia a una clínica veterinaria con su perro',
-    icono: 'm13 2-8.5 11.5H11l-1 8.5L18.5 10.5H13z',
+    Icono: Lightning,
   },
   {
     id: 'teleconsulta',
@@ -44,7 +50,7 @@ const SERVICIOS = [
     text: 'Video con veterinarios verificados y récipe digital, sin salir de casa.',
     img: '/servicios/02-teleconsulta.jpg',
     alt: 'Señora en videoconsulta veterinaria con su gato al lado',
-    icono: 'M15 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3.5l6 4.5V6z',
+    Icono: VideoCamera,
   },
   {
     id: 'agenda',
@@ -52,7 +58,7 @@ const SERVICIOS = [
     text: 'Reserva en clínicas aliadas con recordatorios automáticos.',
     img: '/servicios/03-agenda.jpg',
     alt: 'Cita veterinaria agendada desde el teléfono',
-    icono: 'M4 6h16v15H4zM4 10.5h16M8.5 3v4M15.5 3v4',
+    Icono: CalendarBlank,
   },
   {
     id: 'expediente',
@@ -60,7 +66,7 @@ const SERVICIOS = [
     text: 'Historial, vacunas y récipes de tu mascota, centralizados y siempre a mano.',
     img: '/servicios/04-expediente.jpg',
     alt: 'Cartilla de vacunación digital de una mascota',
-    icono: 'M6 3h8l4 4v14H6zM14 3v4h4M9.5 13h5M9.5 17h5',
+    Icono: FileText,
   },
   {
     id: 'aliados',
@@ -68,7 +74,36 @@ const SERVICIOS = [
     text: 'Grooming y comercios de confianza cerca de ti, dentro de la misma app.',
     img: '/servicios/05-peluqueria.jpg',
     alt: 'Perro recién bañado en una peluquería canina',
-    icono: 'M6.5 4 17 17.5M17.5 4 7 17.5M6 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5M18 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
+    Icono: Scissors,
+  },
+]
+
+// Las dudas reales de una madrugada. Cada respuesta describe algo que la app
+// ya hace; ninguna es promesa de hoja de ruta.
+const DUDAS = [
+  {
+    id: 'abierta',
+    q: '¿Quién está abierto?',
+    a: 'Migo te muestra las clínicas abiertas cerca de ti, con la distancia y el tiempo de llegada.',
+    tono: 'morado',
+  },
+  {
+    id: 'grave',
+    q: '¿Es grave?',
+    a: 'Cuéntale los síntomas a Migo IA: clasifica la urgencia y te dice si amerita ir ya o puede esperar.',
+    tono: 'oscuro',
+  },
+  {
+    id: 'precio',
+    q: '¿Cuánto cuesta?',
+    a: 'Las clínicas aliadas publican sus servicios y precios en su ficha, antes de que salgas de casa.',
+    tono: 'morado',
+  },
+  {
+    id: 'nadie',
+    q: '¿Y si nadie contesta?',
+    a: 'La alerta de emergencia no llama a una sola clínica: llega a todas las cercanas a la vez.',
+    tono: 'morado',
   },
 ]
 
@@ -94,6 +129,7 @@ const PRO_FEATURES = [
 export default function Home() {
   const [navHidden, setNavHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [dudaAbierta, setDudaAbierta] = useState(null)
 
   useEffect(() => {
     let last = window.scrollY
@@ -254,6 +290,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ---------- LAS DUDAS DE LA MADRUGADA ---------- */}
+      <section className="mgo-dudas" id="dudas">
+        <div className="mgo__wrap">
+          <div className="mgo-dudas__head">
+            <h2 className="mgo-dudas__title">
+              Lo que te preguntas a las{' '}
+              <em className="mgo-script">2 a.&nbsp;m.</em>
+            </h2>
+            <p className="mgo-dudas__sub">
+              Toca una tarjeta para ver qué hace Migo con esa duda.
+            </p>
+          </div>
+
+          <ul className="mgo-dudas__grid">
+            {DUDAS.map((d) => {
+              const abierta = dudaAbierta === d.id
+              return (
+                <li className="mgo-duda" key={d.id}>
+                  <button
+                    type="button"
+                    className={`mgo-duda__card mgo-duda__card--${d.tono} ${
+                      abierta ? 'is-open' : ''
+                    }`}
+                    aria-expanded={abierta}
+                    onClick={() => setDudaAbierta(abierta ? null : d.id)}
+                  >
+                    <span className="mgo-duda__flip">
+                      <span className="mgo-duda__cara mgo-duda__cara--frente">
+                        <ArrowUpRight
+                          className="mgo-duda__flecha"
+                          size={20}
+                          weight="bold"
+                          aria-hidden="true"
+                        />
+                        <span className="mgo-duda__q">{d.q}</span>
+                      </span>
+                      <span className="mgo-duda__cara mgo-duda__cara--dorso">
+                        {/* La pregunta se repite arriba: al girar, si no,
+                            se pierde a qué responde la tarjeta. */}
+                        <span className="mgo-duda__eco">{d.q}</span>
+                        <span className="mgo-duda__a">{d.a}</span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </section>
+
       {/* ---------- TRES PASOS ---------- */}
       <section className="mgo-steps" id="como-funciona">
         <div className="mgo__wrap">
@@ -300,18 +387,12 @@ export default function Home() {
             {SERVICIOS.map((s) => (
               <li key={s.id}>
                 <a className="mgo-serv__fila" href="#unete">
-                  <svg
+                  <s.Icono
                     className="mgo-serv__icono"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    size={26}
+                    weight="duotone"
                     aria-hidden="true"
-                  >
-                    <path d={s.icono} />
-                  </svg>
+                  />
                   <span className="mgo-serv__foto">
                     <img src={s.img} alt={s.alt} loading="lazy" />
                   </span>
