@@ -8,6 +8,14 @@
   color: var(--morado-deep);
   background: #fff;
   overflow-x: hidden;
+
+  /* La landing es clara siempre. Los tokens de superficie/texto de
+     tokens.css se invierten con prefers-color-scheme: dark, así que aquí se
+     fijan en claro para que no se cuelen fondos negros en las secciones. */
+  --color-surface: #f6f7f9;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
 }
 
 .mgo__wrap {
@@ -126,8 +134,83 @@
   background: var(--morado-600);
 }
 
+/* Hamburguesa: solo aparece cuando los enlaces se ocultan (<720px). */
 .mgo-nav__toggle {
   display: none;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 10px;
+  background: #f2eee9;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.mgo-nav__home {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.mgo-burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 20px;
+  height: 16px;
+}
+
+.mgo-burger i {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--morado-deep);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.mgo-burger.is-open i:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.mgo-burger.is-open i:nth-child(2) {
+  opacity: 0;
+}
+
+.mgo-burger.is-open i:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.mgo-nav__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+.mgo-nav__panel a {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 17px;
+  color: var(--morado-deep);
+  text-decoration: none;
+}
+
+.mgo-nav__panel a:hover {
+  background: #f2eee9;
+}
+
+.mgo-nav__panel-cta {
+  margin-top: 6px;
+  background: var(--morado);
+  color: #fff !important;
+  text-align: center;
+  font-weight: 600;
 }
 
 /* Contenido del hero */
@@ -152,6 +235,29 @@
   line-height: 1.5;
   max-width: 460px;
   color: rgb(255 255 255 / 90%);
+}
+
+.mgo-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 34px;
+}
+
+/* Mientras no haya ficha en la tienda, el hueco del botón lo ocupa el aviso:
+   es más honesto que un botón que no lleva a ninguna parte. */
+.mgo-hero__soon {
+  display: inline-flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: rgb(246 222 30 / 14%);
+  border: 1px solid rgb(246 222 30 / 45%);
+  color: var(--amarillo);
+  font-weight: 600;
+  font-size: 15px;
 }
 
 /* ---------- Sección "Tu mejor amigo" ---------- */
@@ -200,20 +306,13 @@
   color: #111;
 }
 
-/* placeholder de imagen (foto pendiente) */
-.mgo-ph {
-  background: var(--morado-claro);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(138 47 160 / 55%);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.mgo-ph--440 {
+.mgo-why__img {
+  width: 100%;
   height: 440px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background: var(--morado-claro);
+  display: block;
 }
 
 /* ---------- Sección "Tres pasos" ---------- */
@@ -294,9 +393,90 @@
   color: #000;
 }
 
-.mgo-step .mgo-ph {
+.mgo-step__img {
+  width: 100%;
   height: 244px;
+  object-fit: cover;
   border-radius: 8px;
+  background: var(--morado-claro);
+  display: block;
+  margin-top: auto;
+}
+
+/* ---------- Servicios ---------- */
+.mgo-serv {
+  background: var(--color-surface);
+  padding-block: 96px;
+}
+
+.mgo-serv__head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 48px;
+}
+
+.mgo-serv__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+  color: #111;
+}
+
+.mgo-serv__sub {
+  margin: 12px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* Cinco tarjetas: 3 + 2. Las dos últimas se centran solas gracias al
+   desplazamiento del primer elemento de la segunda fila. */
+.mgo-serv__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+}
+
+.mgo-serv__card {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.mgo-serv__card:nth-child(4) {
+  grid-column: 2 / span 2;
+}
+
+.mgo-serv__img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: var(--morado-claro);
+}
+
+.mgo-serv__body {
+  padding: 22px 24px 26px;
+}
+
+.mgo-serv__name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--morado-deep);
+}
+
+.mgo-serv__text {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
 }
 
 /* ---------- Sección "Veterinario en tu bolsillo" ---------- */
@@ -356,142 +536,139 @@
   box-shadow: var(--shadow);
 }
 
-/* ---------- Footer mínimo (el frame no lo incluye) ---------- */
+/* Aviso clínico: la IA orienta, no diagnostica. */
+.mgo-ai__nota {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Para clínicas y veterinarios ---------- */
+.mgo-pro {
+  background: #fff;
+  padding-block: 96px;
+}
+
+.mgo-pro__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.mgo-pro__eyebrow {
+  margin: 0 0 14px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--morado);
+}
+
+.mgo-pro__title {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1.12;
+  color: #111;
+}
+
+.mgo-pro__text {
+  margin: 18px 0 30px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--color-text);
+  max-width: 46ch;
+}
+
+.mgo-pro__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mgo-pro__item {
+  border-left: 3px solid var(--amarillo);
+  padding: 4px 0 4px 20px;
+}
+
+.mgo-pro__item-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--morado-deep);
+}
+
+.mgo-pro__item-text {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+/* ---------- Footer (el frame no lo incluye) ---------- */
 .mgo-footer {
   background: var(--morado-deep);
   color: rgb(255 255 255 / 80%);
-  padding-block: 40px;
+  padding-block: 56px 32px;
 }
 
-.mgo-footer__inner {
+.mgo-footer__top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 32px;
+}
+
+/* El logo es morado con contorno blanco: sobre el morado profundo del pie
+   se apoya en una pastilla blanca en vez de teñirlo (invertirlo lo deja
+   como una mancha sin letras). */
+.mgo-footer__logo {
+  height: 34px;
+  width: auto;
+  display: block;
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-sizing: content-box;
+}
+
+.mgo-footer__claim {
+  margin: 14px 0 0;
+  font-size: 15px;
+  color: rgb(255 255 255 / 70%);
+}
+
+.mgo-footer__nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
 }
 
-.mgo-footer__brand {
-  font-weight: 800;
-  font-size: 24px;
-  color: #fff;
+.mgo-footer__nav a {
+  font-size: 15px;
+  color: rgb(255 255 255 / 80%);
+  text-decoration: none;
+}
+
+.mgo-footer__nav a:hover {
+  color: var(--amarillo);
+}
+
+.mgo-footer__bottom {
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  padding-top: 24px;
 }
 
 .mgo-footer__copy {
   margin: 0;
   font-size: 14px;
-}
-
-/* ---------- Aliados ---------- */
-.mgo-partners {
-  background: #fff;
-  padding-block: 56px;
-}
-
-.mgo-partners__cap {
-  margin: 0 0 28px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  color: var(--color-text-muted);
-}
-
-.mgo-partners__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 56px;
-}
-
-.mgo-partners__logo {
-  font-weight: 700;
-  font-size: 26px;
-  color: var(--morado);
-  opacity: 0.32;
-}
-
-/* ---------- Testimonios ---------- */
-.mgo-tst {
-  background: var(--morado-claro);
-  padding-block: 96px;
-}
-
-.mgo-tst__head {
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto 48px;
-}
-
-.mgo-tst__title {
-  margin: 0;
-  font-weight: 400;
-  font-size: clamp(30px, 3.4vw, 40px);
-  line-height: 1.1;
-  color: #111;
-}
-
-.mgo-tst__sub {
-  margin: 12px 0 0;
-  font-size: 17px;
-  color: var(--color-text-muted);
-}
-
-.mgo-tst__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-.mgo-tst__card {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background: #fff;
-  border-radius: 16px;
-  padding: 26px;
-  box-shadow: var(--shadow);
-}
-
-.mgo-tst__quote {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #1e293b;
-}
-
-.mgo-tst__person {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.mgo-tst__avatar {
-  flex: 0 0 auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: var(--morado);
-  color: #fff;
-  font-weight: 700;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mgo-tst__name {
-  margin: 0;
-  font-weight: 700;
-  font-size: 15px;
-  color: #1e293b;
-}
-
-.mgo-tst__role {
-  margin: 0;
-  font-size: 13px;
-  color: var(--color-text-muted);
+  color: rgb(255 255 255 / 60%);
 }
 
 /* ---------- CTA Únete / registro ---------- */
@@ -572,6 +749,21 @@
   background: rgb(255 255 255 / 12%);
 }
 
+.mgo-btn--morado {
+  background: var(--morado);
+  color: #fff;
+}
+
+.mgo-btn--morado:hover {
+  background: var(--morado-600);
+}
+
+/* Botón "muerto" a propósito: la ficha de la tienda aún no existe. */
+.mgo-btn.is-soon {
+  cursor: default;
+  opacity: 0.9;
+}
+
 /* ============================================================
    Responsive
    ============================================================ */
@@ -621,27 +813,66 @@
     max-width: none;
   }
 
-  .mgo-tst__grid {
+  /* Dos por fila; la quinta ocupa el ancho completo. */
+  .mgo-serv__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mgo-serv__card,
+  .mgo-serv__card:nth-child(4) {
+    grid-column: auto;
+  }
+
+  .mgo-serv__card:last-child {
+    grid-column: span 2;
+  }
+
+  .mgo-pro__grid {
     grid-template-columns: 1fr;
+    gap: 40px;
   }
 
-  .mgo-partners__row {
-    gap: 28px 40px;
-  }
-
-  .mgo-cta__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .mgo-tst,
+  .mgo-serv,
+  .mgo-pro,
   .mgo-cta {
     padding-block: 72px;
   }
 }
 
 @media (max-width: 720px) {
-  .mgo-nav__links {
+  .mgo-nav__links,
+  .mgo-nav__cta {
     display: none;
+  }
+
+  .mgo-nav__toggle {
+    display: inline-flex;
+  }
+
+  .mgo-serv__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mgo-serv__card:last-child {
+    grid-column: auto;
+  }
+
+  .mgo-why__img {
+    height: 300px;
+  }
+
+  .mgo-footer__top {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .mgo-cta__actions,
+  .mgo-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mgo-hero__soon {
+    justify-content: center;
   }
 }

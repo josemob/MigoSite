@@ -1,0 +1,41 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1168px;height:880px}
+  body{position:relative;overflow:hidden}
+  .base{position:absolute;inset:0;width:1168px;height:880px;display:block}
+
+  /* La pantalla real de Migo, encajada en el hueco blanco del teléfono.
+     El giro replica la inclinación con la que lo sostiene. */
+  .pantalla{
+    position:absolute;
+    left:381px; top:233px;
+    width:146px; height:264px;
+    transform:rotate(-3.2deg);
+    border-radius:13px;
+    overflow:hidden;
+  }
+  .pantalla img{
+    width:100%;
+    display:block;
+    /* Se enseña la parte alta de la ficha: nombre, foto y datos del paciente. */
+    margin-top:0;
+  }
+
+  /* Reflejo sutil del cristal: sin esto el montaje canta. */
+  .brillo{
+    position:absolute;
+    left:381px; top:233px;
+    width:146px; height:264px;
+    transform:rotate(-3.2deg);
+    border-radius:13px;
+    background:linear-gradient(118deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.05) 34%,rgba(255,255,255,0) 52%);
+    pointer-events:none;
+  }
+</style></head>
+<body>
+  <img class="base" src="_paso3-base.png" alt="">
+  <div class="pantalla"><img src="ficha.png" alt=""></div>
+  <div class="brillo"></div>
+</body></html>

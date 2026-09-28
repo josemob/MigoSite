@@ -25,6 +25,13 @@ export const LEGAL = {
   updatedAt: '21 de septiembre de 2026',
 }
 
+// Fichas de la app. Mientras la URL esté vacía, la landing muestra "Muy
+// pronto en Google Play" en vez de un botón que no lleva a ninguna parte.
+export const STORE = {
+  android: '', // ej. 'https://play.google.com/store/apps/details?id=app.holamigo.client'
+  ios: '',
+}
+
 export const NAV_LINKS = [
   { to: '/', label: 'Inicio' },
   { to: '/nosotros', label: 'Nosotros' },
