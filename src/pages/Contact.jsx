@@ -20,8 +20,8 @@ export default function Contact() {
   function handleSubmit(e) {
     e.preventDefault()
     if (!destino) return
-    const asunto = `Contacto desde el sitio — ${form.nombre}`
-    const cuerpo = `${form.mensaje}\n\n—\n${form.nombre}\n${form.email}`
+    const asunto = `Contacto desde el sitio: ${form.nombre}`
+    const cuerpo = `${form.mensaje}\n\n-\n${form.nombre}\n${form.email}`
     window.location.href = `mailto:${destino}?subject=${encodeURIComponent(
       asunto,
     )}&body=${encodeURIComponent(cuerpo)}`

@@ -124,21 +124,21 @@ export default function Privacidad() {
         </p>
         <ul>
           <li>
-            <strong>GetStream</strong> — mensajes, adjuntos y la señal de las videollamadas.
+            <strong>GetStream</strong>: mensajes, adjuntos y la señal de las videollamadas.
           </li>
           <li>
-            <strong>Firebase Cloud Messaging (Google)</strong> — el identificador de tu dispositivo,
+            <strong>Firebase Cloud Messaging (Google)</strong>: el identificador de tu dispositivo,
             para enviarte notificaciones.
           </li>
           <li>
-            <strong>Google Gemini</strong> — el texto que escribes al asistente, para orientarte y
+            <strong>Google Gemini</strong>: el texto que escribes al asistente, para orientarte y
             clasificar la urgencia.
           </li>
           <li>
-            <strong>La pasarela de pago</strong> — los datos de la transacción cuando pagas.
+            <strong>La pasarela de pago</strong>: los datos de la transacción cuando pagas.
           </li>
           <li>
-            <strong>OpenStreetMap</strong> — las coordenadas para dibujar mapas y buscar direcciones.
+            <strong>OpenStreetMap</strong>: las coordenadas para dibujar mapas y buscar direcciones.
             Las consultas pasan por nuestros servidores, no desde tu teléfono.
           </li>
         </ul>

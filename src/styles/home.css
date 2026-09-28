@@ -16,6 +16,31 @@
   --color-text: #1e293b;
   --color-text-muted: #64748b;
   --color-border: #e2e8f0;
+
+  /* ---- Escala tipográfica ----------------------------------------------
+     Antes cada sección traía su propio tamaño (49px aquí, clamp 32-48 allá,
+     clamp 34-52 en el cierre) y ninguna cuadraba con la de al lado. Cuatro
+     escalones para toda la landing; las secciones ya no eligen tamaño, solo
+     escalón. Outfit aguanta poco tracking en display: negativo arriba, cero
+     en el cuerpo. */
+  --t-display: clamp(42px, 6.4vw, 72px);
+  --t-h2: clamp(31px, 3.8vw, 44px);
+  --t-h3: clamp(25px, 2.7vw, 34px);
+  --t-h4: 21px;
+  --t-lead: clamp(17px, 1.2vw, 19px);
+  --t-body: 16px;
+  --t-small: 14px;
+  --t-micro: 13px;
+
+  --lh-display: 1.02;
+  --lh-h2: 1.06;
+  --lh-h3: 1.22;
+  --lh-body: 1.55;
+
+  --ls-display: -0.025em;
+  --ls-h2: -0.02em;
+  --ls-h3: -0.012em;
+  --ls-micro: 0.16em;
 }
 
 .mgo__wrap {
@@ -28,7 +53,8 @@
 /* ---------- Hero ---------- */
 .mgo-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh; /* reserva para navegadores sin dvh */
+  min-height: 100dvh; /* en móvil la barra del navegador no debe cortar el hero */
   display: flex;
   align-items: center;
   color: #fff;
@@ -237,20 +263,27 @@
   padding-block: 120px;
 }
 
+/* Único titular en 500: va sobre la foto y con 400 se deshacía contra el
+   pelo del cachorro. El resto de la página se queda en 400. */
 .mgo-hero__title {
   margin: 0;
-  font-weight: 400;
-  font-size: clamp(44px, 6vw, 78px);
-  line-height: 1;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-size: var(--t-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  /* balance reparte las palabras entre las dos líneas; con un max-width fijo
+     el corte caía en "…te / cuida" y dejaba una línea huérfana. */
+  max-width: 16ch;
+  text-wrap: balance;
 }
 
 .mgo-hero__text {
-  margin: 25px 0 0;
-  font-size: 16px;
-  line-height: 1.5;
-  max-width: 460px;
-  color: rgb(255 255 255 / 90%);
+  margin: 24px 0 0;
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  max-width: 42ch;
+  color: rgb(255 255 255 / 92%);
+  text-wrap: pretty;
 }
 
 .mgo-hero__actions {
@@ -263,17 +296,21 @@
 
 /* Mientras no haya ficha en la tienda, el hueco del botón lo ocupa el aviso:
    es más honesto que un botón que no lleva a ninguna parte. */
+/* Cristal oscuro, no amarillo translúcido: sobre la foto el relleno amarillo
+   al 14% viraba a marrón y parecía un botón desactivado. */
 .mgo-hero__soon {
   display: inline-flex;
   align-items: center;
   height: 52px;
   padding: 0 24px;
   border-radius: 999px;
-  background: rgb(246 222 30 / 14%);
-  border: 1px solid rgb(246 222 30 / 45%);
+  background: rgb(41 14 49 / 45%);
+  border: 1px solid rgb(246 222 30 / 60%);
   color: var(--amarillo);
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--t-small);
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(6px);
 }
 
 /* ---------- Sección "Tu mejor amigo" ---------- */
@@ -300,26 +337,33 @@
 }
 
 .mgo-why__title {
+  text-wrap: balance;
   margin: 0;
   font-weight: 400;
-  font-size: 49px;
-  line-height: 1.08;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
   color: #111;
 }
 
+/* El tracking iba en 8px fijos: a 31px se leía suelto y en móvil partía la
+   línea. En em acompaña al tamaño. */
 .mgo-why__sub {
-  margin: 12px 0 0;
-  font-weight: 300;
-  font-size: 31px;
-  letter-spacing: 8px;
-  color: rgb(0 0 0 / 49%);
+  margin: 14px 0 0;
+  font-weight: 400;
+  font-size: var(--t-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: 0.2em;
+  color: rgb(0 0 0 / 46%);
 }
 
 .mgo-why__text {
+  text-wrap: pretty;
   margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #111;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  max-width: 58ch;
+  color: var(--color-text);
 }
 
 .mgo-why__img {
@@ -345,17 +389,22 @@
 }
 
 .mgo-steps__title {
+  text-wrap: balance;
   margin: 0;
   font-weight: 400;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.1;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
   color: #111;
 }
 
 .mgo-steps__sub {
-  margin: 12px 0 0;
-  font-size: 16px;
-  color: #111;
+  text-wrap: balance;
+  margin: 14px auto 0;
+  max-width: 56ch;
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
+  color: var(--color-text-muted);
 }
 
 .mgo-steps__grid {
@@ -396,17 +445,19 @@
 
 .mgo-step__title {
   margin: 0;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 1.33;
-  color: #000;
+  font-weight: 500;
+  font-size: var(--t-h4);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  color: var(--morado-deep);
 }
 
 .mgo-step__text {
-  margin: 10px 0 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #000;
+  text-wrap: pretty;
+  margin: 8px 0 0;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
 }
 
 .mgo-step__img {
@@ -432,17 +483,21 @@
 }
 
 .mgo-serv__title {
+  text-wrap: balance;
   margin: 0;
   font-weight: 400;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.1;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
   color: #111;
 }
 
 .mgo-serv__sub {
-  margin: 12px 0 0;
-  font-size: 17px;
-  line-height: 1.5;
+  text-wrap: balance;
+  margin: 14px auto 0;
+  max-width: 56ch;
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
   color: var(--color-text-muted);
 }
 
@@ -509,18 +564,19 @@
 .mgo-serv__name {
   display: block;
   font-weight: 400;
-  font-size: clamp(28px, 3.2vw, 42px);
-  line-height: 1.1;
+  font-size: var(--t-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
   color: #111;
   transition: color 0.3s ease;
 }
 
 .mgo-serv__text {
   display: block;
-  margin-top: 8px;
-  max-width: 62ch;
-  font-size: 16px;
-  line-height: 1.5;
+  margin-top: 6px;
+  max-width: 58ch;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
   color: var(--color-text-muted);
 }
 
@@ -535,7 +591,7 @@
   background: var(--morado-claro);
   color: var(--morado);
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--t-small);
   white-space: nowrap;
   transition:
     background-color 0.3s ease,
@@ -614,18 +670,22 @@
 }
 
 .mgo-ai__title {
+  text-wrap: balance;
   margin: 0;
   font-weight: 400;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.1;
-  color: #000;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  color: #111;
 }
 
 .mgo-ai__text {
-  margin: 10px 0 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #000;
+  text-wrap: pretty;
+  margin: 14px 0 0;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  max-width: 54ch;
+  color: var(--color-text);
 }
 
 .mgo-ai__chips {
@@ -636,9 +696,10 @@
 
 .mgo-chip {
   background: #fff;
-  border-radius: 41px;
-  padding: 6px 14px;
-  font-size: 16px;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: var(--t-small);
+  font-weight: 500;
   color: var(--morado-deep);
   box-shadow: var(--shadow);
 }
@@ -646,7 +707,7 @@
 /* Aviso clínico: la IA orienta, no diagnostica. */
 .mgo-ai__nota {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--t-small);
   line-height: 1.45;
   color: var(--color-text-muted);
 }
@@ -665,25 +726,28 @@
 }
 
 .mgo-pro__eyebrow {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 2px;
+  font-size: var(--t-micro);
+  letter-spacing: var(--ls-micro);
   color: var(--morado);
 }
 
 .mgo-pro__title {
+  text-wrap: balance;
   margin: 0;
   font-weight: 400;
-  font-size: clamp(30px, 3.4vw, 42px);
-  line-height: 1.12;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
   color: #111;
 }
 
 .mgo-pro__text {
+  text-wrap: pretty;
   margin: 18px 0 30px;
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
   color: var(--color-text);
   max-width: 46ch;
 }
@@ -704,16 +768,18 @@
 
 .mgo-pro__item-title {
   margin: 0;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 1.3;
+  font-weight: 500;
+  font-size: var(--t-h4);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
   color: var(--morado-deep);
 }
 
 .mgo-pro__item-text {
+  text-wrap: pretty;
   margin: 6px 0 0;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
   color: var(--color-text);
 }
 
@@ -746,7 +812,7 @@
 
 .mgo-footer__claim {
   margin: 14px 0 0;
-  font-size: 15px;
+  font-size: var(--t-small);
   color: rgb(255 255 255 / 70%);
 }
 
@@ -758,7 +824,7 @@
 }
 
 .mgo-footer__nav a {
-  font-size: 15px;
+  font-size: var(--t-small);
   color: rgb(255 255 255 / 80%);
   text-decoration: none;
 }
@@ -774,7 +840,7 @@
 
 .mgo-footer__copy {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--t-small);
   color: rgb(255 255 255 / 60%);
 }
 
@@ -794,24 +860,27 @@
 .mgo-cta__eyebrow {
   margin: 0 0 16px;
   font-weight: 600;
-  letter-spacing: 2px;
-  font-size: 13px;
+  letter-spacing: var(--ls-micro);
+  font-size: var(--t-micro);
   color: var(--amarillo);
 }
 
 .mgo-cta__title {
+  text-wrap: balance;
   margin: 0 auto;
-  max-width: 760px;
+  max-width: 18ch;
   font-weight: 400;
-  font-size: clamp(34px, 4.4vw, 52px);
-  line-height: 1.08;
+  font-size: var(--t-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
 }
 
 .mgo-cta__text {
+  text-wrap: balance;
   margin: 18px auto 0;
-  max-width: 560px;
-  font-size: 17px;
-  line-height: 1.5;
+  max-width: 52ch;
+  font-size: var(--t-lead);
+  line-height: var(--lh-body);
   color: rgb(255 255 255 / 88%);
 }
 
@@ -879,30 +948,38 @@
     padding-inline: 20px;
   }
 
+  /* El hero sigue ocupando la pantalla entera en vertical: la foto se queda
+     a sangre y el texto baja al pie, sobre el morado liso. */
   .mgo-hero {
-    min-height: auto;
-    display: block;
+    align-items: flex-end;
   }
 
-  /* En vertical el recorte a sangre dejaría solo morado o solo el perro:
-     la foto pasa a ir entera, encima del texto. */
+  /* Cover encuadrado sobre el cachorro. Con object-position: right se veía
+     solo el papel roto del borde; 74% deja al perro dentro de la ventana
+     visible y el hueco morado arriba a la izquierda. */
   .mgo-hero__photo {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    margin-top: 24px;
-    object-fit: contain;
-    border-radius: var(--radius-lg);
+    object-position: 74% 38%;
   }
 
+  /* El velo pasa de lateral a vertical: oscurece abajo, que es donde ahora
+     vive el titular, y deja el cachorro limpio arriba. */
   .mgo-hero::after {
-    display: none;
+    background: linear-gradient(
+      180deg,
+      rgb(59 20 70 / 30%) 0%,
+      rgb(59 20 70 / 12%) 26%,
+      rgb(59 20 70 / 72%) 62%,
+      rgb(59 20 70 / 94%) 100%
+    );
   }
 
   .mgo-hero__content {
-    padding: 96px 0 32px;
+    padding: 120px 0 56px;
     max-width: none;
+  }
+
+  .mgo-hero__title {
+    max-width: 14ch;
   }
 
   .mgo-why__grid {
