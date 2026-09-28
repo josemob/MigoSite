@@ -194,7 +194,7 @@ export default function Home() {
 
       {/* ---------- HERO ---------- */}
       <header className="mgo-hero" id="top">
-        <img className="mgo-hero__photo" src="/img/hero.png" alt="" aria-hidden="true" />
+        <img className="mgo-hero__photo" src="/img/hero.jpg" alt="" aria-hidden="true" />
         <div className="mgo__wrap">
           <div className="mgo-hero__content">
             <h1 className="mgo-hero__title">Cuida a quien te cuida</h1>

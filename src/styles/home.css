@@ -20,7 +20,7 @@
 
 .mgo__wrap {
   width: 100%;
-  max-width: 1432px;
+  max-width: 1180px;
   margin-inline: auto;
   padding-inline: 40px;
 }
@@ -46,17 +46,33 @@
   width: 100%;
 }
 
+/* La foto ya trae su propio fondo morado a sangre, así que cubre el hero
+   entero anclada a la derecha: el recorte se come el morado liso de la
+   izquierda, justo donde va el texto. */
 .mgo-hero__photo {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 62%;
-  max-width: 1050px;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: right center;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+  pointer-events: none;
+}
+
+/* Velo de morado Migo por la izquierda: ata la foto a la marca y asegura el
+   contraste del titular pase lo que pase con el encuadre. */
+.mgo-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    rgb(59 20 70 / 82%) 0%,
+    rgb(59 20 70 / 55%) 26%,
+    rgb(59 20 70 / 12%) 46%,
+    rgb(59 20 70 / 0%) 62%
+  );
   pointer-events: none;
 }
 
@@ -868,14 +884,20 @@
     display: block;
   }
 
+  /* En vertical el recorte a sangre dejaría solo morado o solo el perro:
+     la foto pasa a ir entera, encima del texto. */
   .mgo-hero__photo {
     position: relative;
+    inset: auto;
     width: 100%;
-    top: 0;
     height: auto;
     margin-top: 24px;
-    -webkit-mask-image: none;
-    mask-image: none;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+  }
+
+  .mgo-hero::after {
+    display: none;
   }
 
   .mgo-hero__content {
