@@ -20,7 +20,7 @@ export const SITE = {
 export const LEGAL = {
   entity: '', // razón social, ej. 'Migo Clínicas Veterinarias C.A.'
   rif: '', // ej. 'J-40123456-7'
-  email: '', // buzón de privacidad, ej. 'privacidad@holamigo.app'
+  email: '', // buzón de privacidad, ej. 'privacidad@migopet.app'
   location: 'Caracas, Venezuela',
   updatedAt: '21 de septiembre de 2026',
 }
@@ -28,9 +28,15 @@ export const LEGAL = {
 // Fichas de la app. Mientras la URL esté vacía, la landing muestra "Muy
 // pronto en Google Play" en vez de un botón que no lleva a ninguna parte.
 export const STORE = {
-  android: '', // ej. 'https://play.google.com/store/apps/details?id=app.holamigo.client'
+  android: '', // ej. 'https://play.google.com/store/apps/details?id=com.migo.client'
   ios: '',
 }
+
+// API de Migo. La usa la página pública de la placa QR (/m/:código), que abre
+// quien encontró una mascota. En local se puede apuntar a otro servidor con
+// VITE_API_URL en un .env.local.
+export const API_URL =
+  import.meta.env.VITE_API_URL || 'https://migo-api-n85p.onrender.com/api/v1'
 
 export const NAV_LINKS = [
   { to: '/', label: 'Inicio' },

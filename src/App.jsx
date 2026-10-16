@@ -5,6 +5,7 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import Privacidad from './pages/Privacidad.jsx'
 import EliminarCuenta from './pages/EliminarCuenta.jsx'
+import PetPublic from './pages/PetPublic.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 export default function App() {
@@ -12,6 +13,9 @@ export default function App() {
     <Routes>
       {/* Landing full-bleed, autocontenida (su propio navbar/footer) */}
       <Route index element={<Home />} />
+      {/* Placa QR del collar: la abre quien encontró una mascota, sin la app.
+          Fuera del Layout: es una página de una sola tarea, sin navegación. */}
+      <Route path="m/:code" element={<PetPublic />} />
       {/* Resto del sitio con el layout compartido */}
       <Route element={<Layout />}>
         <Route path="nosotros" element={<About />} />
