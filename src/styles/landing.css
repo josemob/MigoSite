@@ -320,7 +320,8 @@
 @media (max-width: 900px) { .lp-faq__grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ── [6] CTA final + [7] pie ──────────────────────────────────────── */
-.lp-footer { background: var(--lp-purple); color: #fff; margin-top: clamp(24px, 4vw, 48px); }
+/* Morado profundo (antes #8A2FA0): el logo amarillo resalta más y no compite con los botones morados. */
+.lp-footer { background: var(--lp-deep); color: #fff; margin-top: clamp(24px, 4vw, 48px); }
 .lp-footer__inner { max-width: 1440px; margin: 0 auto; padding: clamp(64px, 8vw, 120px) var(--lp-pad) 32px; display: flex; flex-direction: column; gap: clamp(48px, 6vw, 96px); }
 .lp-footer__cta { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
 .lp-footer__cta > div { display: flex; flex-direction: column; gap: 28px; }
