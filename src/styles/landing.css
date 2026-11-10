@@ -184,8 +184,7 @@
 .lp-urg li.is-active span:last-child { font-weight: 800; }
 .lp-urg__step { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 96px 0; }
 .lp-urg__media { position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 28px; overflow: hidden; background: var(--lp-lav); }
-.lp-urg__shot { position: absolute; top: 8%; left: 50%; width: 38%; padding: 8px; border-radius: 28px; background: var(--lp-ink); box-shadow: 0 30px 60px rgba(41, 14, 49, .25); }
-.lp-urg__shot img { display: block; width: 100%; aspect-ratio: 1080 / 2400; object-fit: cover; object-position: top; border-radius: 22px; }
+.lp-urg__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
 .lp-urg__card { position: absolute; left: clamp(16px, 2vw, 28px); right: clamp(16px, 2vw, 28px); bottom: clamp(16px, 2vw, 28px); max-width: 520px; padding: clamp(20px, 2.4vw, 32px); border-radius: 20px; background: rgba(255, 255, 255, .6); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); border: 1px solid rgba(255, 255, 255, .7); display: flex; flex-direction: column; gap: 10px; }
 .lp-urg__card > span { font-size: 14px; font-weight: 700; color: var(--lp-purple); }
 .lp-urg__card h3 { font-size: clamp(26px, 2.6vw, 36px); line-height: 1.05; font-weight: 900; letter-spacing: -.025em; }
@@ -197,7 +196,6 @@
   .lp-urg aside ol { display: none; }
   .lp-urg__step { min-height: 0; padding: 48px 0; }
   .lp-urg__media { aspect-ratio: auto; min-height: 460px; }
-  .lp-urg__shot { width: 46%; }
 }
 
 /* ── Servicios ────────────────────────────────────────────────────── */
@@ -216,7 +214,7 @@
 .lp-svc__col { display: flex; flex-direction: column; gap: 16px; will-change: transform; }
 .lp-tile { position: relative; border-radius: 24px; overflow: hidden; }
 .lp-tile__ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #8a6a96; text-align: center; padding: 16px; }
-.lp-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; }
+.lp-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
 .lp-tile__tag { position: absolute; left: 14px; top: 14px; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; white-space: nowrap; }
 .lp-tag--purple { background: var(--lp-purple); color: #fff; }
 .lp-tag--yellow { background: var(--lp-yellow); color: var(--lp-ink); }

@@ -31,25 +31,25 @@ const FEATURES = [
 ]
 
 const URG = [
-  { n: '01', t: 'Pides ayuda', c: 'Tocas el botón de urgencia y describes qué le pasa a tu mascota.', img: `${IMG}/app-home.png`, rot: -4 },
-  { n: '02', t: 'Migo IA te orienta', c: 'Clasifica la gravedad en segundos y te da primeros auxilios mientras llega la ayuda.', img: `${IMG}/app-citas.png`, rot: 4 },
-  { n: '03', t: 'Avisamos cerca de ti', c: 'El aviso llega a las clínicas y vets de guardia en tu zona, con la distancia.', img: `${IMG}/app-directorio.png`, rot: -4 },
-  { n: '04', t: 'Te atienden', c: 'Atiende el primero que acepta, y la consulta queda guardada en su expediente.', img: `${IMG}/app-home.png`, rot: 4 },
+  { n: '01', t: 'Pides ayuda', c: 'Tocas el botón de urgencia y describes qué le pasa a tu mascota.', img: `${IMG}/urgencia/01.jpg` },
+  { n: '02', t: 'Migo IA te orienta', c: 'Clasifica la gravedad en segundos y te da primeros auxilios mientras llega la ayuda.', img: `${IMG}/urgencia/02.jpg` },
+  { n: '03', t: 'Avisamos cerca de ti', c: 'El aviso llega a las clínicas y vets de guardia en tu zona, con la distancia.', img: `${IMG}/urgencia/03.jpg` },
+  { n: '04', t: 'Te atienden', c: 'Atiende el primero que acepta, y la consulta queda guardada en su expediente.', img: `${IMG}/urgencia/04.jpg` },
 ]
 
 const SVC_COL1 = [
-  { label: 'Consulta general', ratio: '4 / 5', bg: '#EEDFF5', tag: 'purple' },
-  { label: 'Peluquería', ratio: '1 / 1', bg: '#F5EBFA', tag: 'yellow' },
-  { label: 'Vacunación', ratio: '3 / 4', bg: '#E7D6EE', tag: 'purple' },
-  { label: 'Spa', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow' },
-  { label: 'Urgencias 24 h', ratio: '1 / 1', bg: '#F5EBFA', tag: 'purple' },
+  { label: 'Consulta general', ratio: '4 / 5', bg: '#EEDFF5', tag: 'purple', img: `${IMG}/servicios/consulta-general.jpg` },
+  { label: 'Peluquería', ratio: '1 / 1', bg: '#F5EBFA', tag: 'yellow', img: `${IMG}/servicios/peluqueria.jpg` },
+  { label: 'Vacunación', ratio: '3 / 4', bg: '#E7D6EE', tag: 'purple', img: `${IMG}/servicios/vacunacion.jpg` },
+  { label: 'Spa', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow', img: `${IMG}/servicios/spa.jpg` },
+  { label: 'Urgencias 24 h', ratio: '1 / 1', bg: '#F5EBFA', tag: 'purple', img: `${IMG}/servicios/urgencias.jpg` },
 ]
 const SVC_COL2 = [
-  { label: 'Baño', ratio: '3 / 4', bg: '#F5EBFA', tag: 'yellow' },
-  { label: 'Videoconsulta', ratio: '1 / 1', bg: '#E7D6EE', tag: 'purple' },
-  { label: 'Corte de uñas', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow', img: `${IMG}/puppy-collar.png` },
-  { label: 'Desparasitación', ratio: '3 / 4', bg: '#F5EBFA', tag: 'purple' },
-  { label: 'Hospitalización', ratio: '4 / 5', bg: '#E7D6EE', tag: 'purple' },
+  { label: 'Baño', ratio: '3 / 4', bg: '#F5EBFA', tag: 'yellow', img: `${IMG}/servicios/bano.jpg` },
+  { label: 'Videoconsulta', ratio: '1 / 1', bg: '#E7D6EE', tag: 'purple', img: `${IMG}/servicios/videoconsulta.jpg` },
+  { label: 'Corte de uñas', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow', img: `${IMG}/servicios/corte-unas.jpg` },
+  { label: 'Desparasitación', ratio: '3 / 4', bg: '#F5EBFA', tag: 'purple', img: `${IMG}/servicios/desparasitacion.jpg` },
+  { label: 'Hospitalización', ratio: '4 / 5', bg: '#E7D6EE', tag: 'purple', img: `${IMG}/servicios/hospitalizacion.jpg` },
 ]
 
 const FAQS = [
@@ -509,9 +509,7 @@ export default function Home() {
               {URG.map((s, i) => (
                 <article key={s.n} className="lp-urg__step" ref={(el) => { r.urg[i] = el }}>
                   <div className="lp-urg__media">
-                    <div className="lp-urg__shot" aria-hidden="true" style={{ transform: `translateX(-50%) rotate(${s.rot}deg)` }}>
-                      <img src={s.img} alt="" loading="lazy" />
-                    </div>
+                    <img className="lp-urg__photo" src={s.img} alt="" loading="lazy" />
                     <div className="lp-urg__card">
                       <span>{s.n}</span>
                       <h3>{s.t}</h3>
