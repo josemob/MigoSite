@@ -220,20 +220,26 @@
 .lp-tile__tag { position: absolute; left: 14px; top: 14px; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; white-space: nowrap; }
 .lp-tag--purple { background: var(--lp-purple); color: #fff; }
 .lp-tag--yellow { background: var(--lp-yellow); color: var(--lp-ink); }
-/* Carrusel de servicios (solo celular): una fila infinita con flechas debajo. */
-.lp-svc-car { display: none; }
-.lp-svc-car__viewport { overflow: hidden; margin: 0 calc(-1 * var(--lp-pad)); padding: 0 var(--lp-pad); touch-action: pan-y; }
-.lp-svc-car__track { --svc-w: min(72vw, 300px); --svc-gap: 14px; display: flex; gap: var(--svc-gap); will-change: transform; }
-.lp-svc-car__item { flex: none; width: var(--svc-w); }
-.lp-svc-car__nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 20px; }
-.lp-svc-car__nav button { width: 52px; height: 52px; border-radius: 999px; border: 0; background: var(--lp-purple); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s ease; }
-.lp-svc-car__nav button:active { background: var(--lp-purple-600); }
-.lp-svc-car__nav span { min-width: 64px; text-align: center; font-size: 14px; font-weight: 700; color: var(--lp-ink); font-variant-numeric: tabular-nums; }
+/* Carrusel de celular (funciones y servicios): fila infinita, flechas debajo, autoplay. */
+.lp-car { display: none; }
+.lp-car__viewport { overflow: hidden; margin: 0 calc(-1 * var(--lp-pad)); padding: 0 var(--lp-pad); touch-action: pan-y; }
+.lp-car__track { --car-w: min(72vw, 300px); --car-gap: 14px; display: flex; gap: var(--car-gap); will-change: transform; }
+.lp-car--features .lp-car__track { --car-w: min(86vw, 420px); }
+.lp-car__item { flex: none; width: var(--car-w); }
+.lp-car--features .lp-feature { width: 100%; aspect-ratio: auto; min-height: 380px; }
+.lp-car__nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 20px; }
+.lp-car__nav button { width: 52px; height: 52px; border-radius: 999px; border: 0; background: var(--lp-purple); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s ease; }
+.lp-car__nav button:active { background: var(--lp-purple-600); }
+.lp-car__nav span { min-width: 64px; text-align: center; font-size: 14px; font-weight: 700; color: var(--lp-ink); font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) {
+  .lp-marquee { display: none; }
+  .lp-car--features { display: block; }
+}
 @media (max-width: 900px) {
   .lp-svc__grid { grid-template-columns: minmax(0, 1fr); }
   .lp-svc aside { position: static; grid-column: 1; }
   .lp-svc__cols { display: none; }
-  .lp-svc-car { display: block; grid-column: 1; grid-row: 2; min-width: 0; }
+  .lp-car--svc { display: block; grid-column: 1; grid-row: 2; min-width: 0; }
 }
 
 /* ── [4] Regístrate en 4 pasos ────────────────────────────────────── */
