@@ -143,6 +143,8 @@
 @media (max-width: 900px) {
   .lp-showcase { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'text' 'phone' 'who' 'cards' 'collar'; min-height: 0; }
   .lp-showcase > div { justify-self: center; text-align: center; }
+  /* "Qué hace": lista numerada, se lee mejor alineada a la izquierda. */
+  .lp-showcase > .lp-does { text-align: left; }
   .lp-collar { margin-right: 0; align-items: center; }
   .lp-collar img { width: min(100%, 520px); margin: 0; }
 }
@@ -191,6 +193,8 @@
 @media (max-width: 900px) {
   .lp-urg__grid { grid-template-columns: minmax(0, 1fr); }
   .lp-urg aside { position: static; height: auto; padding: 56px 0 0; }
+  /* En celular cada paso ya trae su título en la tarjeta: la lista sobra. */
+  .lp-urg aside ol { display: none; }
   .lp-urg__step { min-height: 0; padding: 48px 0; }
   .lp-urg__media { aspect-ratio: auto; min-height: 460px; }
   .lp-urg__shot { width: 46%; }
@@ -216,11 +220,20 @@
 .lp-tile__tag { position: absolute; left: 14px; top: 14px; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; white-space: nowrap; }
 .lp-tag--purple { background: var(--lp-purple); color: #fff; }
 .lp-tag--yellow { background: var(--lp-yellow); color: var(--lp-ink); }
+/* Carrusel de servicios (solo celular): una fila infinita con flechas debajo. */
+.lp-svc-car { display: none; }
+.lp-svc-car__viewport { overflow: hidden; margin: 0 calc(-1 * var(--lp-pad)); padding: 0 var(--lp-pad); touch-action: pan-y; }
+.lp-svc-car__track { --svc-w: min(72vw, 300px); --svc-gap: 14px; display: flex; gap: var(--svc-gap); will-change: transform; }
+.lp-svc-car__item { flex: none; width: var(--svc-w); }
+.lp-svc-car__nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 20px; }
+.lp-svc-car__nav button { width: 52px; height: 52px; border-radius: 999px; border: 0; background: var(--lp-purple); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s ease; }
+.lp-svc-car__nav button:active { background: var(--lp-purple-600); }
+.lp-svc-car__nav span { min-width: 64px; text-align: center; font-size: 14px; font-weight: 700; color: var(--lp-ink); font-variant-numeric: tabular-nums; }
 @media (max-width: 900px) {
   .lp-svc__grid { grid-template-columns: minmax(0, 1fr); }
   .lp-svc aside { position: static; grid-column: 1; }
-  .lp-svc__cols { grid-column: 1; grid-row: 2; }
-  .lp-svc__col { transform: none !important; }
+  .lp-svc__cols { display: none; }
+  .lp-svc-car { display: block; grid-column: 1; grid-row: 2; min-width: 0; }
 }
 
 /* ── [4] Regístrate en 4 pasos ────────────────────────────────────── */

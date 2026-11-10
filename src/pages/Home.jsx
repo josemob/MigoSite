@@ -156,11 +156,20 @@ function useLandingMotion() {
       }
 
       if (r.mq && !reduce) {
-        st.mqSpeed += (st.mqTarget - st.mqSpeed) * 0.06
         const loopW = r.mq.scrollWidth / 3
-        st.mqX -= 0.42 * st.mqSpeed
-        if (loopW && -st.mqX >= loopW) st.mqX += loopW
-        r.mq.style.transform = `translateX(${st.mqX}px)`
+        if (window.innerWidth <= 900 && r.mqWrap) {
+          // Celular: el carrusel avanza con el scroll vertical. Recorre las 4 tarjetas
+          // mientras la sección cruza la pantalla (de entrar por abajo a salir por arriba).
+          const b = r.mqWrap.getBoundingClientRect()
+          const p = Math.max(0, Math.min(1, (vh - b.top) / (vh + b.height)))
+          const target = -p * Math.max(0, loopW - window.innerWidth + 32)
+          st.mqX += (target - st.mqX) * 0.12
+        } else {
+          st.mqSpeed += (st.mqTarget - st.mqSpeed) * 0.06
+          st.mqX -= 0.42 * st.mqSpeed
+          if (loopW && -st.mqX >= loopW) st.mqX += loopW
+        }
+        r.mq.style.transform = `translateX(${st.mqX.toFixed(1)}px)`
       }
 
       if (r.paws.length) {
@@ -266,6 +275,62 @@ function ServiceTile({ s }) {
         ? <img src={s.img} alt="" loading="lazy" />
         : <span className="lp-tile__ph">Foto · {s.label}</span>}
       <span className={`lp-tile__tag lp-tag--${s.tag}`}>{s.label}</span>
+    </div>
+  )
+}
+
+// Servicios en celular: una fila, carrusel infinito con flechas centradas debajo
+// (y deslizar con el dedo). La lista va triplicada; al pasar el final de la copia
+// del medio se salta sin animación a la posición equivalente, así nunca se acaba.
+const SVC_ALL = SVC_COL1.flatMap((s, i) => [s, SVC_COL2[i]]).filter(Boolean)
+
+function ServicesCarousel() {
+  const N = SVC_ALL.length
+  const [idx, setIdx] = useState(N)
+  const [anim, setAnim] = useState(true)
+  const touch = useRef(null)
+  const go = (d) => { setAnim(true); setIdx((i) => i + d) }
+  const onEnd = () => {
+    if (idx >= 2 * N || idx < N) {
+      setAnim(false)
+      setIdx((i) => ((i - N) % N + N) % N + N)
+    }
+  }
+  useEffect(() => {
+    if (!anim) {
+      const t = requestAnimationFrame(() => requestAnimationFrame(() => setAnim(true)))
+      return () => cancelAnimationFrame(t)
+    }
+  }, [anim])
+  const items = [...SVC_ALL, ...SVC_ALL, ...SVC_ALL]
+  return (
+    <div className="lp-svc-car" aria-roledescription="carrusel" aria-label="Servicios">
+      <div className="lp-svc-car__viewport"
+        onTouchStart={(e) => { touch.current = e.touches[0].clientX }}
+        onTouchEnd={(e) => {
+          if (touch.current == null) return
+          const dx = e.changedTouches[0].clientX - touch.current
+          touch.current = null
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+        }}>
+        <div className="lp-svc-car__track" onTransitionEnd={onEnd}
+          style={{ transform: `translateX(calc(${-idx} * (var(--svc-w) + var(--svc-gap))))`, transition: anim ? 'transform .45s cubic-bezier(.22,.8,.3,1)' : 'none' }}>
+          {items.map((s, i) => (
+            <div key={i} className="lp-svc-car__item" aria-hidden={i < N || i >= 2 * N ? 'true' : undefined}>
+              <ServiceTile s={{ ...s, ratio: '4 / 5' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="lp-svc-car__nav">
+        <button type="button" onClick={() => go(-1)} aria-label="Servicio anterior">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <span aria-live="polite">{String(((idx - N) % N + N) % N + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}</span>
+        <button type="button" onClick={() => go(1)} aria-label="Servicio siguiente">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
     </div>
   )
 }
@@ -396,7 +461,7 @@ export default function Home() {
         <section id="como" className="lp-features">
           <span className="lp-kicker">Qué puedes hacer</span>
           <h2 className="lp-h2"><span className="lp-light">Todo lo que tu mascota necesita,</span><br />a la mano.</h2>
-          <div className="lp-marquee lp-bleed"
+          <div className="lp-marquee lp-bleed" ref={(el) => { r.mqWrap = el }}
             onMouseEnter={() => r.pauseMarquee?.()} onMouseLeave={() => r.playMarquee?.()}>
             <div className="lp-marquee__track" ref={(el) => { r.mq = el }}>
               {[0, 1, 2].flatMap((k) => FEATURES.map((f, i) => (
@@ -472,6 +537,7 @@ export default function Home() {
                 {SVC_COL2.map((s) => <ServiceTile key={s.label} s={s} />)}
               </div>
             </div>
+            <ServicesCarousel />
           </div>
         </section>
 
