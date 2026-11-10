@@ -30,6 +30,7 @@ export const LEGAL = {
 export const STORE = {
   android: '', // ej. 'https://play.google.com/store/apps/details?id=com.migo.client'
   ios: '',
+  vetAndroid: '', // ficha de Migo Vet; mientras esté vacía, el botón lleva a la sección de profesionales
 }
 
 // API de Migo. La usa la página pública de la placa QR (/m/:código), que abre

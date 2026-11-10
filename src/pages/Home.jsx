@@ -1,529 +1,627 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  ArrowUpRight,
-  CalendarBlank,
-  FileText,
-  Lightning,
-  Scissors,
-  VideoCamera,
-} from '@phosphor-icons/react'
-import { LEGAL_LINKS, STORE } from '../config/site.js'
-import '../styles/home.css'
+import { STORE } from '../config/site.js'
+import '../styles/landing.css'
+
+// Landing de Migo (migopet.app). Adaptación a React del diseño "Migo Landing".
+// Animaciones (las mismas del diseño, en un solo requestAnimationFrame):
+//  - menú que se oculta al bajar, se vuelve sólido y marca la sección activa
+//  - teléfono del hero que sube y se desvanece con el scroll
+//  - teléfono flotante y rastro de huellas en "Qué es Migo"
+//  - carrusel continuo de funciones (frena al pasar el ratón)
+//  - urgencia paso a paso con la columna fija que resalta el paso visible
+//  - columnas de servicios con parallax a distintas velocidades
+// Todo se apaga con prefers-reduced-motion.
+
+const IMG = '/landing'
+const PLAY = STORE.android || '#registro'
+const PLAY_LIVE = Boolean(STORE.android)
+const VET_URL = STORE.vetAndroid || '#pro'
+const PANEL_URL = 'https://migo-vet.vercel.app'
+
+const FEATURES = [
+  { big: 'Agenda', sub: 'con vets cerca de ti', title: 'Agenda tu cita', copy: 'Eliges día y hora, la clínica confirma.', cta: 'Agendar',
+    img: `${IMG}/app-citas.png`, phone: true },
+  { big: '24/7', sub: 'a cualquier hora', title: 'Alerta roja 24/7', copy: 'Avisa a clínicas y vets cerca de ti.', cta: 'Generar alerta',
+    img: `${IMG}/app-home.png`, phone: true },
+  { big: 'IA', sub: 'tu orientación al instante', title: 'Migo IA', copy: 'Te orienta en segundos.', cta: 'Preguntar a Migo IA',
+    img: `${IMG}/app-directorio.png`, phone: true },
+  { big: 'QR', sub: 'en su collar', title: 'Expediente + placa QR', copy: 'Sus vacunas a la mano; si se pierde, te avisan.', cta: 'Crear su expediente',
+    img: `${IMG}/collar-migo.png`, phone: false },
+]
+
+const URG = [
+  { n: '01', t: 'Pides ayuda', c: 'Tocas el botón de urgencia y describes qué le pasa a tu mascota.', img: `${IMG}/app-home.png`, rot: -4 },
+  { n: '02', t: 'Migo IA te orienta', c: 'Clasifica la gravedad en segundos y te da primeros auxilios mientras llega la ayuda.', img: `${IMG}/app-citas.png`, rot: 4 },
+  { n: '03', t: 'Avisamos cerca de ti', c: 'El aviso llega a las clínicas y vets de guardia en tu zona, con la distancia.', img: `${IMG}/app-directorio.png`, rot: -4 },
+  { n: '04', t: 'Te atienden', c: 'Atiende el primero que acepta, y la consulta queda guardada en su expediente.', img: `${IMG}/app-home.png`, rot: 4 },
+]
+
+const SVC_COL1 = [
+  { label: 'Consulta general', ratio: '4 / 5', bg: '#EEDFF5', tag: 'purple' },
+  { label: 'Peluquería', ratio: '1 / 1', bg: '#F5EBFA', tag: 'yellow' },
+  { label: 'Vacunación', ratio: '3 / 4', bg: '#E7D6EE', tag: 'purple' },
+  { label: 'Spa', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow' },
+  { label: 'Urgencias 24 h', ratio: '1 / 1', bg: '#F5EBFA', tag: 'purple' },
+]
+const SVC_COL2 = [
+  { label: 'Baño', ratio: '3 / 4', bg: '#F5EBFA', tag: 'yellow' },
+  { label: 'Videoconsulta', ratio: '1 / 1', bg: '#E7D6EE', tag: 'purple' },
+  { label: 'Corte de uñas', ratio: '4 / 5', bg: '#EEDFF5', tag: 'yellow', img: `${IMG}/puppy-collar.png` },
+  { label: 'Desparasitación', ratio: '3 / 4', bg: '#F5EBFA', tag: 'purple' },
+  { label: 'Hospitalización', ratio: '4 / 5', bg: '#E7D6EE', tag: 'purple' },
+]
+
+const FAQS = [
+  { q: '¿Migo es gratis?', a: 'Sí. Para los dueños de mascotas Migo es gratis. Las clínicas y los veterinarios son quienes pagan por usar la plataforma.' },
+  { q: '¿Está para iPhone?', a: 'Por ahora Migo está en Android, en Google Play. La versión para iPhone viene en camino.' },
+  { q: '¿Cómo pago la consulta?', a: 'Ves el precio antes de agendar y pagas directamente en la clínica. Muy pronto también podrás pagar desde la app.' },
+  { q: '¿Qué tan rápido responden en una urgencia?', a: 'El aviso llega al momento a las clínicas y veterinarios de guardia cerca de ti. Atiende el primero que acepta, y mientras tanto Migo IA te guía con primeros auxilios.' },
+  { q: '¿Quién ve mis datos si alguien escanea la placa?', a: 'Solo la ficha pública de tu mascota. Tu teléfono queda oculto, salvo que tú decidas mostrarlo.' },
+  { q: '¿Cómo sé que el veterinario es real?', a: 'Cada veterinario se verifica con su cédula y su carnet del Colegio de Médicos Veterinarios antes de atender en Migo.' },
+]
 
 const STEPS = [
-  {
-    n: 1,
-    title: 'Cuéntanos qué pasa',
-    text: 'La IA de Migo escucha los síntomas de tu mascota, te da primeros auxilios y calcula qué tan urgente es.',
-    img: '/pasos/paso-1-cuentanos.jpg',
-    alt: 'Dueña describiendo los síntomas de su cachorro en la app Migo',
-  },
-  {
-    n: 2,
-    title: 'Te conectamos',
-    text: 'Con clínicas 24/7 y veterinarios verificados cerca de ti. En una urgencia, activamos la alerta al instante.',
-    img: '/pasos/paso-2-conectamos.jpg',
-    alt: 'Veterinaria atendiendo una teleconsulta desde su clínica',
-  },
-  {
-    n: 3,
-    title: 'Todo queda guardado',
-    text: 'Vacunas, consultas e historia médica viven en un solo expediente que llevas siempre en el bolsillo.',
-    img: '/pasos/paso-3-guardado.jpg',
-    alt: 'Expediente médico de la mascota dentro de la app Migo',
-  },
+  { n: '1', title: 'Descarga Migo', copy: 'Búscala en Google Play.' },
+  { n: '2', title: 'Crea tu cuenta', copy: 'Con Google o con tu correo.' },
+  { n: '3', title: 'Registra a tu mascota', copy: 'Nombre, raza, edad y una foto.' },
+  { n: '4', title: '¡Listo!', copy: 'Busca clínicas cerca y agenda tu primera cita.' },
 ]
 
-const SERVICIOS = [
-  {
-    id: 'emergencias',
-    title: 'Emergencias 24/7',
-    text: 'Botón de urgencia, triaje con IA y ruteo a la clínica abierta más cercana.',
-    img: '/servicios/01-emergencias.jpg',
-    alt: 'Dueño llegando de urgencia a una clínica veterinaria con su perro',
-    Icono: Lightning,
-  },
-  {
-    id: 'teleconsulta',
-    title: 'Teleconsulta',
-    text: 'Video con veterinarios verificados y récipe digital, sin salir de casa.',
-    img: '/servicios/02-teleconsulta.jpg',
-    alt: 'Señora en videoconsulta veterinaria con su gato al lado',
-    Icono: VideoCamera,
-  },
-  {
-    id: 'agenda',
-    title: 'Agenda de citas',
-    text: 'Reserva en clínicas aliadas con recordatorios automáticos.',
-    img: '/servicios/03-agenda.jpg',
-    alt: 'Cita veterinaria agendada desde el teléfono',
-    Icono: CalendarBlank,
-  },
-  {
-    id: 'expediente',
-    title: 'Expediente y cartilla',
-    text: 'Historial, vacunas y récipes de tu mascota, centralizados y siempre a mano.',
-    img: '/servicios/04-expediente.jpg',
-    alt: 'Cartilla de vacunación digital de una mascota',
-    Icono: FileText,
-  },
-  {
-    id: 'aliados',
-    title: 'Peluquería y aliados',
-    text: 'Grooming y comercios de confianza cerca de ti, dentro de la misma app.',
-    img: '/servicios/05-peluqueria.jpg',
-    alt: 'Perro recién bañado en una peluquería canina',
-    Icono: Scissors,
-  },
-]
+// Rastro de 8 huellas en diagonal por la sección "Qué es Migo".
+const PAWS = (() => {
+  const N = 8, out = []
+  const P = (t) => ({ x: 4 + t * 92, y: 82 - t * 64 + Math.sin(t * Math.PI * 1.6) * 10 })
+  for (let i = 0; i < N; i++) {
+    const t = i / (N - 1), a = P(t), b = P(Math.min(1, t + 0.01)), c = P(Math.max(0, t - 0.01))
+    const ang = Math.atan2(b.y - c.y, b.x - c.x)
+    const side = i % 2 ? 1 : -1, off = 4
+    out.push({
+      x: `${a.x - Math.sin(ang) * off * side}%`,
+      y: `${a.y + Math.cos(ang) * off * side * 1.6}%`,
+      r: `${(ang * 180) / Math.PI + 90}deg`,
+    })
+  }
+  return out
+})()
 
-// Las dudas reales de una madrugada. Cada respuesta describe algo que la app
-// ya hace; ninguna es promesa de hoja de ruta.
-const DUDAS = [
-  {
-    id: 'abierta',
-    q: '¿Quién está abierto?',
-    a: 'Migo te muestra las clínicas abiertas cerca de ti, con la distancia y el tiempo de llegada.',
-    tono: 'morado',
-  },
-  {
-    id: 'grave',
-    q: '¿Es grave?',
-    a: 'Cuéntale los síntomas a Migo IA: clasifica la urgencia y te dice si amerita ir ya o puede esperar.',
-    tono: 'oscuro',
-  },
-  {
-    id: 'precio',
-    q: '¿Cuánto cuesta?',
-    a: 'Las clínicas aliadas publican sus servicios y precios en su ficha, antes de que salgas de casa.',
-    tono: 'morado',
-  },
-  {
-    id: 'nadie',
-    q: '¿Y si nadie contesta?',
-    a: 'La alerta de emergencia no llama a una sola clínica: llega a todas las cercanas a la vez.',
-    tono: 'morado',
-  },
-]
+const NAV_SECTIONS = ['como', 'registro', 'pro']
 
-const AI_CHIPS = ['Detecta urgencias', 'Conoce a tu mascota', 'Agenda por ti']
-
-// Lo que Migo le da al otro lado del mostrador. Nada de esto es promesa:
-// es lo que ya trae el panel web para clínicas y el app del veterinario.
-const PRO_FEATURES = [
-  {
-    title: 'Alertas de urgencia en tiempo real',
-    text: 'Cuando alguien cerca activa una emergencia, tu clínica la ve con la ubicación, el motivo y el tiempo de llegada.',
-  },
-  {
-    title: 'Agenda y pacientes en un panel',
-    text: 'Citas, historias clínicas y récipes en un panel web pensado para el día a día de la consulta.',
-  },
-  {
-    title: 'Te encuentran quienes te necesitan',
-    text: 'Tu ficha aparece en el directorio con horarios, servicios y la distancia real a cada dueño.',
-  },
-]
-
-export default function Home() {
-  const [navHidden, setNavHidden] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [dudaAbierta, setDudaAbierta] = useState(null)
+function useLandingMotion() {
+  const refs = useRef({ paws: [], urg: [] })
+  const [nav, setNav] = useState({ hidden: false, solid: false, active: '' })
+  const [urg, setUrg] = useState(0)
 
   useEffect(() => {
-    let last = window.scrollY
+    const r = refs.current
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const st = { lastY: window.scrollY, nav: { hidden: false, solid: false, active: '' }, urg: 0,
+      svcA: 0, svcB: 0, mqX: 0, mqSpeed: 1, mqTarget: 1 }
+
     const onScroll = () => {
       const y = window.scrollY
-      // Baja: ocultar (a partir de 120px). Sube: mostrar.
-      if (y > last && y > 120) setNavHidden(true)
-      else if (y < last) setNavHidden(false)
-      last = y
+      let hidden = st.nav.hidden
+      if (y < 80) hidden = false
+      else if (y > st.lastY + 4) hidden = true
+      else if (y < st.lastY - 4) hidden = false
+      st.lastY = y
+      const mid = window.innerHeight * 0.35
+      let active = ''
+      NAV_SECTIONS.forEach((id) => {
+        const el = document.getElementById(id)
+        if (!el) return
+        const b = el.getBoundingClientRect()
+        if (b.top <= mid && b.bottom > mid) active = id
+      })
+      const solid = y > 10
+      const n = st.nav
+      if (n.hidden !== hidden || n.solid !== solid || n.active !== active) {
+        st.nav = { hidden, solid, active }
+        setNav(st.nav)
+      }
+      const half = window.innerHeight / 2
+      let act = 0
+      r.urg.forEach((el, i) => { if (el && el.getBoundingClientRect().top < half) act = i })
+      if (act !== st.urg) { st.urg = act; setUrg(act) }
     }
+
+    let raf = 0
+    const tick = () => {
+      raf = requestAnimationFrame(tick)
+      const vh = window.innerHeight || 800
+      const sy = window.scrollY
+      const now = performance.now() / 1000
+
+      if (r.float) r.float.style.transform = reduce ? 'rotate(-4deg)'
+        : `translateY(${Math.sin(now * 1.1) * 12}px) rotate(${-4 + Math.sin(now * 0.7) * 1.5}deg)`
+
+      if (r.heroPhone) {
+        if (reduce || window.innerWidth <= 1000) {
+          r.heroPhone.style.transform = 'rotate(-7deg)'
+          r.heroPhone.style.opacity = 1
+        } else {
+          const p = Math.min(1, sy / vh)
+          r.heroPhone.style.transform = `translateY(${-sy * 0.9}px) rotate(${-7 - p * 6}deg)`
+          r.heroPhone.style.opacity = Math.max(0, 1 - Math.max(0, p - 0.45) / 0.4).toFixed(3)
+        }
+      }
+
+      if (r.svc && r.svc1 && r.svc2 && !reduce && window.innerWidth > 900) {
+        const b = r.svc.getBoundingClientRect()
+        const p = Math.max(0, Math.min(1, (vh - b.top) / b.height))
+        st.svcA += ((1 - p) * 80 - st.svcA) * 0.06
+        st.svcB += ((1 - p) * 240 - st.svcB) * 0.035
+        r.svc1.style.transform = `translateY(${st.svcA.toFixed(1)}px)`
+        r.svc2.style.transform = `translateY(${st.svcB.toFixed(1)}px)`
+      }
+
+      if (r.mq && !reduce) {
+        st.mqSpeed += (st.mqTarget - st.mqSpeed) * 0.06
+        const loopW = r.mq.scrollWidth / 3
+        st.mqX -= 0.42 * st.mqSpeed
+        if (loopW && -st.mqX >= loopW) st.mqX += loopW
+        r.mq.style.transform = `translateX(${st.mqX}px)`
+      }
+
+      if (r.paws.length) {
+        const N = r.paws.length, cyc = 8, ph = (now % cyc) / cyc
+        r.paws.forEach((el, i) => {
+          if (!el) return
+          if (reduce) { el.style.opacity = 0.18; return }
+          const age = ph - (i / N) * 0.6
+          let o = 0
+          if (age >= 0) o = age < 0.03 ? age / 0.03 : Math.max(0, 1 - (age - 0.03) / 0.35)
+          el.style.opacity = (o * 0.22).toFixed(3)
+        })
+      }
+    }
+
+    r.pauseMarquee = () => { st.mqTarget = 0 }
+    r.playMarquee = () => { st.mqTarget = 1 }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // La landing es clara siempre; el <body> hereda el token de tokens.css, que
-  // en modo oscuro es casi negro y asoma al hacer overscroll bajo el pie.
-  useEffect(() => {
-    const previo = document.body.style.background
-    document.body.style.background = '#fff'
+    window.addEventListener('resize', onScroll)
+    onScroll()
+    tick()
     return () => {
-      document.body.style.background = previo
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
     }
   }, [])
 
-  // Con el menú móvil abierto se bloquea el scroll del fondo.
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [menuOpen])
+  return { refs, nav, urg }
+}
 
-  const cerrar = () => setMenuOpen(false)
+function PlayIcon() {
+  return (
+    <svg width="26" height="28" viewBox="0 0 24 26" aria-hidden="true">
+      <path d="M1.5 1.2 13.3 13 1.5 24.8c-.4-.2-.6-.7-.6-1.2V2.4c0-.5.2-1 .6-1.2Z" fill="#F6DE1E" />
+      <path d="M17.3 9 13.3 13l4 4 4.6-2.6c1.3-.7 1.3-2.1 0-2.8L17.3 9Z" fill="#FFFFFF" />
+      <path d="m1.5 1.2 11.8 11.8 4-4L3.5.6C2.7.1 2 .3 1.5 1.2Z" fill="#B66FC6" />
+      <path d="m1.5 24.8 11.8-11.8 4 4-13.8 8.4c-.8.5-1.5.3-2-.6Z" fill="#EEDFF5" />
+    </svg>
+  )
+}
+
+function AppleIcon() {
+  return (
+    <svg width="24" height="28" viewBox="0 0 24 28" aria-hidden="true" fill="#290E31">
+      <path d="M19.6 14.9c0-3.2 2.6-4.7 2.7-4.8-1.5-2.2-3.8-2.5-4.6-2.5-2-.2-3.8 1.1-4.8 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4.1 1.2-5.2 3.1-2.2 3.8-.6 9.5 1.6 12.6 1 1.5 2.3 3.2 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.5 1 4.1 1c1.7 0 2.8-1.5 3.8-3 1.2-1.7 1.7-3.4 1.7-3.5-.1 0-3.2-1.2-3.2-5ZM16.5 5.6c.9-1.1 1.5-2.5 1.3-4-1.3.1-2.8.9-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.7Z" />
+    </svg>
+  )
+}
+
+function PawIcon(props) {
+  return (
+    <svg width="160" height="160" viewBox="0 0 24 24" fill="#8A2FA0" {...props}>
+      <ellipse cx="5.5" cy="10" rx="2.3" ry="3" /><ellipse cx="9.5" cy="5.5" rx="2.3" ry="3" />
+      <ellipse cx="14.5" cy="5.5" rx="2.3" ry="3" /><ellipse cx="18.5" cy="10" rx="2.3" ry="3" />
+      <path d="M12 11c-3.3 0-6.5 4.6-6.5 7.4 0 2 1.6 3.1 3.4 3.1 1.2 0 2-.6 3.1-.6s1.9.6 3.1.6c1.8 0 3.4-1.1 3.4-3.1 0-2.8-3.2-7.4-6.5-7.4Z" />
+    </svg>
+  )
+}
+
+// Ilustraciones de trazo de los 4 pasos (lavanda + acento amarillo).
+function StepIllo({ i }) {
+  const L = '#E7D6EE', Y = '#F6DE1E'
+  const phone = (<><rect x="40" y="8" width="40" height="78" rx="8" /><path d="M55 15h10" /></>)
+  const art = [
+    <>{phone}<path d="M60 28v26" stroke={Y} /><path d="M50 44l10 10 10-10" stroke={Y} /><path d="M48 66h24" /><path d="M22 30c-6 4-6 12 0 16M98 30c6 4 6 12 0 16" /></>,
+    <>{phone}<circle cx="60" cy="34" r="7" stroke={Y} /><path d="M48 56c0-9 24-9 24 0" stroke={Y} /><path d="M48 66h24M48 74h14" /></>,
+    <><path d="M38 50c0-14 10-22 22-22s22 8 22 22-10 24-22 24-22-10-22-24z" /><path d="M41 40L40 17l14 12M79 40l1-23-14 12" /><path d="M44 32v-8l5 4M76 32v-8l-5 4" /><path d="M47 48q5-5 10 0q-5 5-10 0zM63 48q5-5 10 0q-5 5-10 0z" /><path d="M52 45v6M68 45v6" /><path d="M58 56h4l-2 3z" fill={L} /><path d="M60 59c0 3-4 4-6 2M60 59c0 3 4 4 6 2" /><path d="M28 55h14M28 62l14-3M92 55H78M92 62l-14-3" /><path d="M46 72c9 5 19 5 28 0" stroke={Y} /><circle cx="60" cy="81" r="4" stroke={Y} /><path d="M96 12v10M91 17h10" stroke={Y} /></>,
+    <><rect x="18" y="22" width="50" height="50" rx="7" /><path d="M18 36h50M32 16v12M54 16v12" /><path d="M31 54l8 8 15-16" stroke={Y} /><path d="M92 32c-8 0-13 6-13 12 0 9 13 22 13 22s13-13 13-22c0-6-5-12-13-12z" /><circle cx="92" cy="44" r="4" stroke={Y} /></>,
+  ][i]
+  return (
+    <svg width="200" height="160" viewBox="0 0 120 96" fill="none" stroke={L} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {art}
+    </svg>
+  )
+}
+
+function FeatureCard({ f }) {
+  const imgStyle = f.phone
+    ? { right: '6%', bottom: '-26%', width: '34%', transform: 'rotate(7deg)', padding: 8, borderRadius: 36, background: '#290E31', boxShadow: '0 30px 60px rgba(41,14,49,.25)' }
+    : { right: '-12%', bottom: '-4%', width: '60%', transform: 'rotate(-6deg)' }
+  return (
+    <article className="lp-feature">
+      <div className="lp-feature__body">
+        <span className="lp-feature__big">{f.big}</span>
+        <span className="lp-feature__sub">{f.sub}</span>
+        <h3>{f.title}</h3>
+        <p>{f.copy}</p>
+        <a className="lp-feature__btn" href={PLAY}>{f.cta}</a>
+      </div>
+      <div className="lp-feature__img" aria-hidden="true" style={imgStyle}>
+        <img src={f.img} alt="" loading="lazy" style={{ borderRadius: f.phone ? 28 : 0 }} />
+      </div>
+    </article>
+  )
+}
+
+function ServiceTile({ s }) {
+  return (
+    <div className="lp-tile" style={{ aspectRatio: s.ratio, background: s.bg }}>
+      {s.img
+        ? <img src={s.img} alt="" loading="lazy" />
+        : <span className="lp-tile__ph">Foto · {s.label}</span>}
+      <span className={`lp-tile__tag lp-tag--${s.tag}`}>{s.label}</span>
+    </div>
+  )
+}
+
+function FaqItem({ item, open, onToggle }) {
+  return (
+    <div className={`lp-faq__item${open ? ' is-open' : ''}`}>
+      <button type="button" onClick={onToggle} aria-expanded={open}>
+        <span>{item.q}</span>
+        <span className="lp-faq__icon" aria-hidden="true">{open ? '×' : '+'}</span>
+      </button>
+      {open && <p>{item.a}</p>}
+    </div>
+  )
+}
+
+export default function Home() {
+  const { refs, nav, urg } = useLandingMotion()
+  const r = refs.current
+  const [faqOpen, setFaqOpen] = useState(0)
+  const toggleFaq = (i) => setFaqOpen((o) => (o === i ? -1 : i))
+  const storeTop = PLAY_LIVE ? 'Disponible en' : 'Muy pronto en'
+
+  useEffect(() => {
+    document.title = 'Migo · Tu mascota, bien cuidada a cualquier hora'
+  }, [])
 
   return (
-    <div className="mgo">
-      {/* ---------- NAVBAR sticky ---------- */}
-      <div className={`mgo-nav-bar ${navHidden && !menuOpen ? 'is-hidden' : ''}`}>
-        <div className="mgo__wrap">
-          <nav className="mgo-nav" aria-label="Principal">
-            <a href="#top" className="mgo-nav__home" onClick={cerrar}>
-              <img className="mgo-nav__logo" src="/img/migo-logo.svg" alt="Migo" />
-            </a>
-            <div className="mgo-nav__links">
-              <a className="mgo-nav__link" href="#como-funciona">
-                Cómo funciona
-              </a>
-              <a className="mgo-nav__link" href="#servicios">
-                Servicios
-              </a>
-              <a className="mgo-nav__link" href="#clinicas">
-                Para clínicas
-              </a>
-              <a className="mgo-nav__link" href="#unete">
-                Únete
-              </a>
-            </div>
-            <a className="mgo-nav__cta" href="#unete">
-              Crear cuenta
-            </a>
-            <button
-              type="button"
-              className="mgo-nav__toggle"
-              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((v) => !v)}
-            >
-              <span className={`mgo-burger ${menuOpen ? 'is-open' : ''}`} aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </span>
-            </button>
-          </nav>
-
-          {/* Panel desplegable (solo móvil) */}
-          {menuOpen && (
-            <div className="mgo-nav__panel">
-              <a href="#como-funciona" onClick={cerrar}>
-                Cómo funciona
-              </a>
-              <a href="#servicios" onClick={cerrar}>
-                Servicios
-              </a>
-              <a href="#ia" onClick={cerrar}>
-                Migo IA
-              </a>
-              <a href="#clinicas" onClick={cerrar}>
-                Para clínicas
-              </a>
-              <a className="mgo-nav__panel-cta" href="#unete" onClick={cerrar}>
-                Crear cuenta
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ---------- HERO ---------- */}
-      <header className="mgo-hero" id="top">
-        <img className="mgo-hero__photo" src="/img/hero.jpg" alt="" aria-hidden="true" />
-        <div className="mgo__wrap">
-          <div className="mgo-hero__content">
-            <h1 className="mgo-hero__title">Cuida a quien te cuida</h1>
-            <p className="mgo-hero__text">
-              La salud de tu mascota, a un toque de distancia. Emergencias 24/7,
-              teleconsulta y su expediente médico, siempre contigo.
-            </p>
-            <div className="mgo-hero__actions">
-              {STORE.android ? (
-                <a
-                  className="mgo-btn mgo-btn--amarillo"
-                  href={STORE.android}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Descargar para Android
-                </a>
-              ) : (
-                <span className="mgo-hero__soon">Muy pronto en Google Play</span>
-              )}
-              <a className="mgo-btn mgo-btn--ghost" href="#como-funciona">
-                Ver cómo funciona
-              </a>
-            </div>
+    <div className="lp">
+      {/* [1] MENÚ */}
+      <header className={`lp-nav${nav.solid ? ' is-solid' : ''}${nav.hidden ? ' is-hidden' : ''}`}>
+        <nav className="lp-nav__inner" aria-label="Principal">
+          <a href="#" className="lp-nav__logo" aria-label="Migo, inicio">
+            <img src={`${IMG}/logo-migo.png`} alt="Migo" />
+          </a>
+          <div className="lp-nav__links">
+            <a href="#como" className={nav.active === 'como' ? 'is-active' : ''}>Cómo funciona</a>
+            <a href="#registro" className={nav.active === 'registro' ? 'is-active' : ''}>Regístrate</a>
+            <a href="#pro" className={nav.active === 'pro' ? 'is-active' : ''}>Profesionales</a>
           </div>
-        </div>
+          <a href={PLAY} className="lp-btn lp-btn--purple lp-nav__cta">Descargar Migo</a>
+        </nav>
       </header>
 
-      {/* ---------- TU MEJOR AMIGO ---------- */}
-      <section className="mgo-why" id="que-hace">
-        <div className="mgo__wrap mgo-why__grid">
-          <div className="mgo-why__col">
-            <div className="mgo-why__head">
-              <h2 className="mgo-why__title">Tu mejor amigo no está bien.</h2>
-              <p className="mgo-why__sub">¿A dónde vas?</p>
-            </div>
-            <img
-              className="mgo-why__img"
-              src="/img/amigo-1.jpg"
-              alt="Perro mirando a cámara con la cabeza ladeada"
-              loading="lazy"
-            />
+      {/* [2] HERO */}
+      <section className="lp-hero">
+        <div className="lp-hero__main">
+          <div className="lp-hero__tags">
+            <span>Citas</span><i aria-hidden="true" /><span>Urgencias 24/7</span><i aria-hidden="true" />
+            <span>Migo IA</span><i aria-hidden="true" /><span>Placa QR</span>
           </div>
-          <div className="mgo-why__col">
-            <img
-              className="mgo-why__img"
-              src="/img/amigo-2.jpg"
-              alt="Dueña buscando ayuda en su teléfono de madrugada con su perro"
-              loading="lazy"
-            />
-            <p className="mgo-why__text">
-              Ese nudo en el estómago, esa carrera contra el reloj sin saber qué
-              clínica está abierta ni a quién llamar. Migo existe justo para ese
-              momento, para que nunca lo enfrentes solo.
-            </p>
+          <svg className="lp-hero__wave" width="88" height="12" viewBox="0 0 88 12" fill="none" aria-hidden="true">
+            <path d="M2 8c6-6 10 4 16-1s10 4 16-1 10 4 16-1 10 4 16-1 10 4 18-1" stroke="#8A2FA0" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <h1>Tu mascota, <b className="lp-purple">bien cuidada</b> a <b>cualquier hora.</b></h1>
+          <p className="lp-hero__sub">Agenda con un vet cerca, pide ayuda en una urgencia y lleva su historial contigo. <strong>Gratis.</strong></p>
+          <div className="lp-hero__cta">
+            <a href={PLAY} className="lp-btn lp-btn--purple">Crear mi cuenta gratis</a>
+            <a href="#pro" className="lp-hero__pro">¿Eres veterinario o tienes una clínica? →</a>
           </div>
+        </div>
+
+        <div className="lp-hero__phone" ref={(el) => { r.heroPhone = el }} aria-hidden="true">
+          <img className="lp-phone-img" src={`${IMG}/app-home.png`} alt="" />
+        </div>
+        <div className="lp-stores">
+          <span className="lp-stores__label">Descarga Migo</span>
+          <a href={PLAY} className="lp-store lp-store--play">
+            <PlayIcon /><span><small>{storeTop}</small><strong>Google Play</strong></span>
+          </a>
+          <span className="lp-store lp-store--ios">
+            <AppleIcon /><span><small>Muy pronto en</small><strong>App Store</strong></span>
+          </span>
         </div>
       </section>
 
-      {/* ---------- LAS DUDAS DE LA MADRUGADA ---------- */}
-      <section className="mgo-dudas" id="dudas">
-        <div className="mgo__wrap">
-          <div className="mgo-dudas__head">
-            <h2 className="mgo-dudas__title">
-              Lo que te preguntas a las{' '}
-              <em className="mgo-script">2 a.&nbsp;m.</em>
-            </h2>
-            <p className="mgo-dudas__sub">
-              Toca una tarjeta para ver qué hace Migo con esa duda.
-            </p>
-          </div>
-
-          <ul className="mgo-dudas__grid">
-            {DUDAS.map((d) => {
-              const abierta = dudaAbierta === d.id
-              return (
-                <li className="mgo-duda" key={d.id}>
-                  <button
-                    type="button"
-                    className={`mgo-duda__card mgo-duda__card--${d.tono} ${
-                      abierta ? 'is-open' : ''
-                    }`}
-                    aria-expanded={abierta}
-                    onClick={() => setDudaAbierta(abierta ? null : d.id)}
-                  >
-                    <span className="mgo-duda__flip">
-                      <span className="mgo-duda__cara mgo-duda__cara--frente">
-                        <ArrowUpRight
-                          className="mgo-duda__flecha"
-                          size={20}
-                          weight="bold"
-                          aria-hidden="true"
-                        />
-                        <span className="mgo-duda__q">{d.q}</span>
-                      </span>
-                      <span className="mgo-duda__cara mgo-duda__cara--dorso">
-                        {/* La pregunta se repite arriba: al girar, si no,
-                            se pierde a qué responde la tarjeta. */}
-                        <span className="mgo-duda__eco">{d.q}</span>
-                        <span className="mgo-duda__a">{d.a}</span>
-                      </span>
-                    </span>
-                  </button>
+      {/* QUÉ ES MIGO */}
+      <section className="lp-showcase-wrap">
+        <div className="lp-showcase-wrap__inner">
+          <div className="lp-showcase">
+            <div className="lp-paws" aria-hidden="true">
+              {PAWS.map((p, i) => (
+                <PawIcon key={i} ref={(el) => { r.paws[i] = el }}
+                  style={{ left: p.x, top: p.y, transform: `translate(-50%,-50%) rotate(${p.r})` }} />
+              ))}
+            </div>
+            <div className="lp-showcase__text">
+              <span className="lp-kicker">Qué es Migo</span>
+              <h2 className="lp-h2"><span className="lp-light">La app que cuida</span> a tu mascota.</h2>
+              <p className="lp-lead">Migo es una app venezolana que conecta a los dueños de mascotas con veterinarios, clínicas, hospitales y centros de cuidado cerca de ti.</p>
+            </div>
+            <div className="lp-showcase__phone">
+              <div className="lp-float" ref={(el) => { r.float = el }} aria-hidden="true">
+                <img className="lp-phone-img" src={`${IMG}/app-home.png`} alt="" loading="lazy" />
+              </div>
+            </div>
+            <div className="lp-who lp-card lp-card--glass">
+              <span className="lp-kicker">Para quién</span>
+              <ul>
+                <li>
+                  <span className="lp-who__head"><b>Dueños de mascotas</b><span className="lp-pill lp-pill--yellow">Gratis</span></span>
+                  <span>Para cuidar a su mascota desde el teléfono, sin llamar clínica por clínica.</span>
                 </li>
-              )
-            })}
-          </ul>
+                <li>
+                  <span className="lp-who__head"><b>Vets y clínicas</b><span className="lp-pill lp-pill--purple">Profesionales</span></span>
+                  <span>Reciben pacientes y organizan su trabajo con Migo Vet o el panel web.</span>
+                </li>
+              </ul>
+            </div>
+            <div className="lp-collar">
+              <img src={`${IMG}/collar-migo.png`} alt="Collar morado con la placa QR de Migo" loading="lazy" />
+              <span>Placa QR Migo</span>
+            </div>
+            <div className="lp-does lp-card">
+              <span className="lp-kicker">Qué hace</span>
+              <ol>
+                <li><span>01</span><b>Te conecta</b><span>Con vets y clínicas verificados cerca de ti, para agendar sin llamar.</span></li>
+                <li><span>02</span><b>Te ayuda en una urgencia</b><span>A cualquier hora, con Migo IA orientándote mientras llega la ayuda.</span></li>
+                <li><span>03</span><b>Guarda su historia</b><span>Expediente, vacunas y una placa QR para que siempre vuelva a casa.</span></li>
+              </ol>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ---------- TRES PASOS ---------- */}
-      <section className="mgo-steps" id="como-funciona">
-        <div className="mgo__wrap">
-          <div className="mgo-steps__head">
-            <h2 className="mgo-steps__title">
-              De la angustia a la calma en tres pasos
-            </h2>
-            <p className="mgo-steps__sub">
-              Sin llamadas a ciegas ni salas de espera eternas. Migo te acompaña
-              desde el primer síntoma.
-            </p>
-          </div>
-          <div className="mgo-steps__grid">
-            {STEPS.map((s) => (
-              <article className="mgo-step" key={s.n}>
-                <div className="mgo-step__body">
-                  <span className="mgo-step__num">{s.n}</span>
-                  <div>
-                    <h3 className="mgo-step__title">{s.title}</h3>
-                    <p className="mgo-step__text">{s.text}</p>
-                  </div>
+      <main className="lp-main">
+        {/* [3] QUÉ PUEDES HACER */}
+        <section id="como" className="lp-features">
+          <span className="lp-kicker">Qué puedes hacer</span>
+          <h2 className="lp-h2"><span className="lp-light">Todo lo que tu mascota necesita,</span><br />a la mano.</h2>
+          <div className="lp-marquee lp-bleed"
+            onMouseEnter={() => r.pauseMarquee?.()} onMouseLeave={() => r.playMarquee?.()}>
+            <div className="lp-marquee__track" ref={(el) => { r.mq = el }}>
+              {[0, 1, 2].flatMap((k) => FEATURES.map((f, i) => (
+                <div key={`${k}-${i}`} aria-hidden={k > 0 ? 'true' : undefined} style={{ display: 'contents' }}>
+                  <FeatureCard f={f} />
                 </div>
-                <img className="mgo-step__img" src={s.img} alt={s.alt} loading="lazy" />
-              </article>
-            ))}
+              )))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ---------- SERVICIOS ---------- */}
-      <section className="mgo-serv" id="servicios">
-        <div className="mgo__wrap">
-          <div className="mgo-serv__head">
-            <h2 className="mgo-serv__title">Todo lo que Migo hace por ustedes</h2>
-            <p className="mgo-serv__sub">
-              Una sola app para la urgencia, el control de rutina y el día a día
-              de tu mascota.
-            </p>
-          </div>
-          {/* Lista: al pasar por encima (o al enfocar con teclado) cada fila
-              abre la foto del servicio. La altura de la fila no cambia, solo
-              el ancho de la foto, para que no salte lo que viene debajo. */}
-          <ul className="mgo-serv__lista">
-            {SERVICIOS.map((s) => (
-              <li key={s.id}>
-                <a className="mgo-serv__fila" href="#unete">
-                  <s.Icono
-                    className="mgo-serv__icono"
-                    size={26}
-                    weight="duotone"
-                    aria-hidden="true"
-                  />
-                  <span className="mgo-serv__foto">
-                    <img src={s.img} alt={s.alt} loading="lazy" />
-                  </span>
-                  <span className="mgo-serv__txt">
-                    <span className="mgo-serv__name">{s.title}</span>
-                    <span className="mgo-serv__text">{s.text}</span>
-                  </span>
-                  <span className="mgo-serv__cta">Ver en la app</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ---------- VETERINARIO EN TU BOLSILLO ---------- */}
-      <section className="mgo-ai" id="ia">
-        <img className="mgo-ai__bubbles" src="/img/bubbles.svg" alt="" aria-hidden="true" />
-        <div className="mgo__wrap">
-          <div className="mgo-ai__content">
+        {/* URGENCIA PASO A PASO */}
+        <section id="urgencias" className="lp-urg lp-bleed">
+          <div className="lp-urg__grid">
+            <aside>
+              <div>
+                <span className="lp-kicker">Alerta roja 24/7</span>
+                <h2 className="lp-h2"><span className="lp-light">Así funciona</span> una urgencia en Migo.</h2>
+              </div>
+              <ol>
+                {URG.map((s, i) => (
+                  <li key={s.n} className={i === urg ? 'is-active' : ''}><span>{s.n}</span><span>{s.t}</span></li>
+                ))}
+              </ol>
+            </aside>
             <div>
-              <h2 className="mgo-ai__title">
-                Un veterinario en tu bolsillo, a cualquier hora
-              </h2>
-              <p className="mgo-ai__text">
-                Cuéntale a Migo qué le pasa a tu mascota y recibe orientación clara
-                al instante. Conoce su edad, raza y alergias, y si es una
-                emergencia, te lo dice y activa la ayuda.
-              </p>
-            </div>
-            <div className="mgo-ai__chips">
-              {AI_CHIPS.map((c) => (
-                <span className="mgo-chip" key={c}>
-                  {c}
-                </span>
+              {URG.map((s, i) => (
+                <article key={s.n} className="lp-urg__step" ref={(el) => { r.urg[i] = el }}>
+                  <div className="lp-urg__media">
+                    <div className="lp-urg__shot" aria-hidden="true" style={{ transform: `translateX(-50%) rotate(${s.rot}deg)` }}>
+                      <img src={s.img} alt="" loading="lazy" />
+                    </div>
+                    <div className="lp-urg__card">
+                      <span>{s.n}</span>
+                      <h3>{s.t}</h3>
+                      <p>{s.c}</p>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
-            <p className="mgo-ai__nota">
-              Migo IA orienta y prioriza; no sustituye el diagnóstico de un
-              veterinario.
-            </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ---------- PARA CLÍNICAS Y VETERINARIOS ---------- */}
-      <section className="mgo-pro" id="clinicas">
-        <div className="mgo__wrap mgo-pro__grid">
-          <div className="mgo-pro__intro">
-            <p className="mgo-pro__eyebrow">PARA CLÍNICAS Y VETERINARIOS</p>
-            <h2 className="mgo-pro__title">
-              Del otro lado del mostrador también hay un Migo
-            </h2>
-            <p className="mgo-pro__text">
-              Estamos sumando las primeras clínicas, veterinarios independientes y
-              comercios aliados en Venezuela. Afiliarte es gratis mientras armamos
-              la red.
-            </p>
-            <Link className="mgo-btn mgo-btn--morado" to="/contacto">
-              Quiero afiliar mi negocio
-            </Link>
+        {/* SERVICIOS */}
+        <section id="servicios" className="lp-svc" ref={(el) => { r.svc = el }}>
+          <div className="lp-svc__grid">
+            <aside>
+              <div>
+                <span className="lp-kicker">Servicios</span>
+                <h2 className="lp-h2"><span className="lp-light">De la consulta</span> al baño de los sábados.</h2>
+                <p className="lp-lead">Clínicas, hospitales 24 h, veterinarios independientes, peluquerías y spas. Filtra por servicio, mira precio y horario, y agenda.</p>
+              </div>
+              <div className="lp-svc__kinds">
+                <div>
+                  <span className="lp-tag lp-tag--purple">Salud</span>
+                  <b>Veterinaria y clínicas</b>
+                  <span>Consultas, vacunas, desparasitación, urgencias, videoconsulta y hospitalización, con vets verificados.</span>
+                </div>
+                <div>
+                  <span className="lp-tag lp-tag--yellow">Cuidado</span>
+                  <b>Estética, baños y spa</b>
+                  <span>Baño, peluquería, corte de uñas y spa en centros cerca de ti, con precio en $ y Bs.</span>
+                </div>
+              </div>
+              <a href={PLAY} className="lp-btn lp-btn--purple">Descargar Migo</a>
+            </aside>
+            <div className="lp-svc__cols">
+              <div className="lp-svc__col" ref={(el) => { r.svc1 = el }}>
+                {SVC_COL1.map((s) => <ServiceTile key={s.label} s={s} />)}
+              </div>
+              <div className="lp-svc__col" ref={(el) => { r.svc2 = el }}>
+                {SVC_COL2.map((s) => <ServiceTile key={s.label} s={s} />)}
+              </div>
+            </div>
           </div>
-          <ul className="mgo-pro__list">
-            {PRO_FEATURES.map((f) => (
-              <li className="mgo-pro__item" key={f.title}>
-                <h3 className="mgo-pro__item-title">{f.title}</h3>
-                <p className="mgo-pro__item-text">{f.text}</p>
-              </li>
+        </section>
+
+        {/* [4] REGÍSTRATE EN 4 PASOS */}
+        <section id="registro" className="lp-steps lp-bleed">
+          <div className="lp-steps__inner">
+            <span className="lp-kicker">Empieza hoy</span>
+            <h2 className="lp-h2"><span className="lp-light">Regístrate en</span> 4 pasos.</h2>
+            <ol>
+              {STEPS.map((s, i) => (
+                <li key={s.n}>
+                  <span className="lp-steps__n">{s.n}</span>
+                  <div className="lp-steps__illo"><StepIllo i={i} /></div>
+                  <div><h3>{s.title}</h3><p>{s.copy}</p></div>
+                </li>
+              ))}
+            </ol>
+            <div className="lp-steps__foot">
+              <div>
+                <a href={PLAY} className="lp-btn lp-btn--yellow lp-btn--yellow-soft">Crear mi cuenta gratis</a>
+                <small>{storeTop} Google Play</small>
+              </div>
+              <div className="lp-qr">
+                <div className="lp-qr__box">QR</div>
+                <p><strong>¿Estás en la compu?</strong> Escanéalo con tu teléfono.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* POR QUÉ MIGO */}
+        <section className="lp-why">
+          <div className="lp-why__grid">
+            <div className="lp-why__left">
+              <div>
+                <span className="lp-kicker">Por qué Migo</span>
+                <h2 className="lp-h2"><span className="lp-light">Se acabó llamar</span> clínica por clínica.</h2>
+              </div>
+              <img className="lp-why__pup" src={`${IMG}/puppy-collar.png`} alt="Cachorro con collar y placa Migo" loading="lazy" />
+            </div>
+            <div className="lp-why__cards">
+              <article className="lp-why__card lp-why__card--without">
+                <span className="lp-kicker">Sin Migo</span>
+                <ul>
+                  {['En una urgencia llamas a ciegas, sin saber qué clínica está abierta ni cuál queda cerca.',
+                    'Las vacunas viven en una libreta que se pierde.',
+                    'Las citas se cuadran por WhatsApp, mensaje por mensaje.',
+                    'Precios en dólares, cobrados en bolívares a una tasa que cambia cada día.'].map((t) => (
+                    <li key={t}><span aria-hidden="true">×</span><span>{t}</span></li>
+                  ))}
+                </ul>
+              </article>
+              <article className="lp-why__card lp-why__card--with">
+                <span className="lp-why__with"><span>Con</span><img src={`${IMG}/logo-migo-amarillo.png`} alt="Migo" /></span>
+                <ul>
+                  {['Un botón avisa a las clínicas y vets cercanos, con distancia y tiempo de llegada.',
+                    'Su expediente y su cartilla de vacunas, siempre en tu teléfono.',
+                    'Eliges día y hora, y la clínica confirma.',
+                    'Precio en dólares y su equivalente en bolívares a tasa BCV del día.'].map((t) => (
+                    <li key={t}><span aria-hidden="true">✓</span><span>{t}</span></li>
+                  ))}
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* [5] PARA PROFESIONALES */}
+        <section id="pro" className="lp-pro">
+          <span className="lp-kicker">Para profesionales</span>
+          <h2 className="lp-h2"><span className="lp-light">Recibe pacientes y</span> organiza tu trabajo.</h2>
+          <div className="lp-pro__band">
+            <div className="lp-pro__copy">
+              <span className="lp-pro__badge">App Migo Vet</span>
+              <h3><span className="lp-light">Para</span> veterinarios</h3>
+              <p>Independiente o de clínica. Recibe citas y urgencias en tu zona y atiende por videollamada. Pagas la urgencia solo si la atiendes.</p>
+              <span className="lp-pro__needs">Necesitas: <strong>cédula + carnet del CMV</strong></span>
+              <a href={VET_URL} className="lp-btn lp-btn--yellow">Regístrate en Migo Vet</a>
+            </div>
+            <div className="lp-pro__mock" aria-hidden="true">
+              <div className="lp-pro__bubble">Nueva urgencia a 2,1 km: Luna, poodle de 3 años, vómitos desde anoche.</div>
+              <div className="lp-pro__list">
+                <div className="lp-pro__row"><span><strong>Luna · Poodle</strong><small>Gravedad media · Migo IA</small></span><em className="is-yellow">Urgencia</em></div>
+                <div className="lp-pro__row"><span><strong>Toddy · Mestizo</strong><small>Hoy 4:30 p. m.</small></span><em>Cita</em></div>
+                <div className="lp-pro__row"><span><strong>Kira · Siamés</strong><small>Mañana 10:00 a. m.</small></span><em>Video</em></div>
+              </div>
+              <b>Todo desde tu teléfono</b>
+              <div className="lp-chips"><span>Citas</span><span>Urgencias</span><span>Videollamada</span><span>Expedientes</span><span>Plan gratis</span></div>
+            </div>
+          </div>
+          <div className="lp-pro__band lp-pro__band--flip">
+            <div className="lp-pro__copy">
+              <span className="lp-pro__badge">Panel web</span>
+              <h3><span className="lp-light">Para</span> clínicas y centros</h3>
+              <p>Clínicas, hospitales 24 h, peluquerías y spas. Sal en el mapa y maneja agenda, equipo, servicios y finanzas en un mismo panel.</p>
+              <span className="lp-pro__needs">Necesitas: <strong>RIF, dirección y horario</strong></span>
+              <a href={PANEL_URL} className="lp-btn lp-btn--yellow" target="_blank" rel="noopener noreferrer">Registra tu local</a>
+            </div>
+            <div className="lp-pro__mock" aria-hidden="true">
+              <div className="lp-pro__bubble">Hoy en Clínica Los Palos Grandes</div>
+              <div className="lp-pro__list">
+                <div className="lp-pro__row"><span><strong>12 citas</strong><small>3 vets de guardia</small></span><em>Agenda</em></div>
+                <div className="lp-pro__row"><span><strong>2 urgencias</strong><small>Atendidas · 1 en curso</small></span><em className="is-yellow">24 h</em></div>
+                <div className="lp-pro__row"><span><strong>Baño y peluquería</strong><small>6 cupos libres</small></span><em>Servicios</em></div>
+              </div>
+              <b>Sin licencia aparte</b>
+              <div className="lp-chips"><span>Agenda</span><span>Equipo</span><span>Guardias</span><span>Servicios</span><span>Finanzas</span></div>
+            </div>
+          </div>
+        </section>
+
+        {/* PREGUNTAS FRECUENTES */}
+        <section id="faq" className="lp-faq">
+          <div className="lp-faq__head">
+            <span>Preguntas frecuentes</span>
+            <h2 className="lp-h2"><span className="lp-light">Lo que necesitas saber</span> antes de descargar Migo.</h2>
+          </div>
+          <div className="lp-faq__grid">
+            {[0, 1].map((col) => (
+              <div key={col} className="lp-faq__col">
+                {FAQS.map((item, i) => (i % 2 === col
+                  ? <FaqItem key={item.q} item={item} open={faqOpen === i} onToggle={() => toggleFaq(i)} />
+                  : null))}
+              </div>
             ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ---------- ÚNETE / REGISTRO ---------- */}
-      <section className="mgo-cta" id="unete">
-        <div className="mgo__wrap">
-          <p className="mgo-cta__eyebrow">ÚNETE A LA MANADA MIGO</p>
-          <h2 className="mgo-cta__title">Cuida, conecta y crece con Migo</h2>
-          <p className="mgo-cta__text">
-            Crea tu cuenta gratis y ten a tu mascota más protegida. ¿Eres clínica,
-            veterinario o comercio? Afíliate y haz crecer tu práctica.
-          </p>
-          <div className="mgo-cta__actions">
-            {STORE.android ? (
-              <a
-                className="mgo-btn mgo-btn--amarillo"
-                href={STORE.android}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Descargar Migo gratis
-              </a>
-            ) : (
-              <span className="mgo-btn mgo-btn--amarillo is-soon" aria-disabled="true">
-                Muy pronto en Google Play
-              </span>
-            )}
-            <Link className="mgo-btn mgo-btn--ghost" to="/contacto">
-              Afiliar mi negocio
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* ---------- FOOTER (añadido; el frame no lo incluye) ---------- */}
-      <footer className="mgo-footer">
-        <div className="mgo__wrap">
-          <div className="mgo-footer__top">
-            <div className="mgo-footer__brand-col">
-              <img className="mgo-footer__logo" src="/img/migo-logo.svg" alt="Migo" />
-              <p className="mgo-footer__claim">Cuida a quien te cuida</p>
+      {/* [6] CTA FINAL + [7] PIE */}
+      <footer className="lp-footer">
+        <div className="lp-footer__inner">
+          <div className="lp-footer__cta">
+            <div>
+              <h2 className="lp-h2"><span className="lp-light">Tu amigo merece</span> lo mejor.<br /><span className="lp-light">Empieza</span> gratis.</h2>
+              <div className="lp-footer__buttons">
+                <a href={PLAY} className="lp-btn lp-btn--yellow lp-btn--yellow-white">Descargar Migo</a>
+                <small>{storeTop} Google Play</small>
+              </div>
             </div>
-            <nav className="mgo-footer__nav" aria-label="Secciones">
-              <a href="#como-funciona">Cómo funciona</a>
-              <a href="#servicios">Servicios</a>
-              <a href="#clinicas">Para clínicas</a>
-              <Link to="/nosotros">Nosotros</Link>
-              <Link to="/contacto">Contacto</Link>
-            </nav>
-            <nav className="mgo-footer__nav" aria-label="Legal">
-              {LEGAL_LINKS.map((l) => (
-                <Link key={l.to} to={l.to}>
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
+            <img className="lp-footer__logo" src={`${IMG}/logo-migo-amarillo.png`} alt="" loading="lazy" />
           </div>
-          <div className="mgo-footer__bottom">
-            <p className="mgo-footer__copy">
-              © {new Date().getFullYear()} Migo · Cuida a quien te cuida
-            </p>
+          <div className="lp-footer__bar">
+            <nav aria-label="Pie de página">
+              <a href="#faq">Preguntas frecuentes</a>
+              <Link to="/contacto">Contacto</Link>
+              <Link to="/privacidad">Privacidad</Link>
+              <Link to="/eliminar-cuenta">Eliminar cuenta</Link>
+            </nav>
+            <span>© {new Date().getFullYear()} Migo · Hecho en Venezuela</span>
           </div>
         </div>
       </footer>
