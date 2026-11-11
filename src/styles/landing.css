@@ -267,6 +267,13 @@
 .lp-qr__box { width: 96px; height: 96px; border-radius: 8px; display: block; }
 .lp-qr p { font-size: 14px; line-height: 1.45; max-width: 18ch; }
 @media (max-width: 1040px) { .lp-steps ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Celular: el botón y la tarjeta del QR ocupan todo el ancho, uno debajo del otro. */
+@media (max-width: 760px) {
+  .lp-steps__foot { flex-direction: column; align-items: stretch; }
+  .lp-steps__foot > div:first-child { flex-direction: column; align-items: stretch; text-align: center; }
+  .lp-qr { width: 100%; }
+  .lp-qr p { max-width: none; }
+}
 @media (max-width: 540px) { .lp-steps ol { grid-template-columns: minmax(0, 1fr); } }
 
 /* ── Por qué Migo ─────────────────────────────────────────────────── */
