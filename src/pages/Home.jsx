@@ -225,21 +225,10 @@ function PawIcon(props) {
   )
 }
 
-// Ilustraciones de trazo de los 4 pasos (lavanda + acento amarillo).
+// Íconos de los 4 pasos (lavanda + detalles en amarillo Migo), en public/landing/pasos/.
+const STEP_ICONS = ['1-descarga', '2-cuenta', '3-mascota', '4-listo']
 function StepIllo({ i }) {
-  const L = '#E7D6EE', Y = '#F6DE1E'
-  const phone = (<><rect x="40" y="8" width="40" height="78" rx="8" /><path d="M55 15h10" /></>)
-  const art = [
-    <>{phone}<path d="M60 28v26" stroke={Y} /><path d="M50 44l10 10 10-10" stroke={Y} /><path d="M48 66h24" /><path d="M22 30c-6 4-6 12 0 16M98 30c6 4 6 12 0 16" /></>,
-    <>{phone}<circle cx="60" cy="34" r="7" stroke={Y} /><path d="M48 56c0-9 24-9 24 0" stroke={Y} /><path d="M48 66h24M48 74h14" /></>,
-    <><path d="M38 50c0-14 10-22 22-22s22 8 22 22-10 24-22 24-22-10-22-24z" /><path d="M41 40L40 17l14 12M79 40l1-23-14 12" /><path d="M44 32v-8l5 4M76 32v-8l-5 4" /><path d="M47 48q5-5 10 0q-5 5-10 0zM63 48q5-5 10 0q-5 5-10 0z" /><path d="M52 45v6M68 45v6" /><path d="M58 56h4l-2 3z" fill={L} /><path d="M60 59c0 3-4 4-6 2M60 59c0 3 4 4 6 2" /><path d="M28 55h14M28 62l14-3M92 55H78M92 62l-14-3" /><path d="M46 72c9 5 19 5 28 0" stroke={Y} /><circle cx="60" cy="81" r="4" stroke={Y} /><path d="M96 12v10M91 17h10" stroke={Y} /></>,
-    <><rect x="18" y="22" width="50" height="50" rx="7" /><path d="M18 36h50M32 16v12M54 16v12" /><path d="M31 54l8 8 15-16" stroke={Y} /><path d="M92 32c-8 0-13 6-13 12 0 9 13 22 13 22s13-13 13-22c0-6-5-12-13-12z" /><circle cx="92" cy="44" r="4" stroke={Y} /></>,
-  ][i]
-  return (
-    <svg width="200" height="160" viewBox="0 0 120 96" fill="none" stroke={L} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {art}
-    </svg>
-  )
+  return <img className={`lp-steps__icon lp-steps__icon--${i + 1}`} src={`${IMG}/pasos/${STEP_ICONS[i]}.svg`} alt="" aria-hidden="true" loading="lazy" />
 }
 
 function FeatureCard({ f }) {

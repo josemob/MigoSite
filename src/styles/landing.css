@@ -257,6 +257,8 @@
 .lp-steps li { background: rgba(255, 255, 255, .08); border-radius: 20px; padding: 28px; aspect-ratio: 1; min-height: fit-content; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
 .lp-steps__n { width: 52px; height: 52px; border-radius: 999px; background: var(--lp-yellow); color: var(--lp-text); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 22px; }
 .lp-steps__illo { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 150px; }
+.lp-steps__icon { display: block; height: 104px; width: auto; max-width: 70%; }
+.lp-steps__icon--3 { transform: scale(.8); }
 .lp-steps h3 { font-size: clamp(20px, 1.6vw, 24px); line-height: 1.2; font-weight: 800; }
 .lp-steps li p { margin-top: 8px; color: #e7d6ee; }
 .lp-steps__foot { display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; justify-content: space-between; margin-top: 40px; }
