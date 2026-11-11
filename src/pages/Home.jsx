@@ -456,10 +456,6 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            <div className="lp-collar">
-              <img src={`${IMG}/collar-migo.png`} alt="Collar morado con la placa QR de Migo" loading="lazy" />
-              <span>Placa QR Migo</span>
-            </div>
             <div className="lp-does lp-card">
               <span className="lp-kicker">Qué hace</span>
               <ol>
