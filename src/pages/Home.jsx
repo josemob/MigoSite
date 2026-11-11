@@ -652,7 +652,7 @@ export default function Home() {
               <h3><span className="lp-light">Para</span> clínicas y centros</h3>
               <p>Clínicas, hospitales 24 h, peluquerías y spas. Sal en el mapa y maneja agenda, equipo, servicios y finanzas en un mismo panel.</p>
               <span className="lp-pro__needs">Necesitas: <strong>RIF, dirección y horario</strong></span>
-              <a href={PANEL_URL} className="lp-btn lp-btn--yellow" target="_blank" rel="noopener noreferrer">Registra tu local</a>
+              <a href={`${PANEL_URL}/registro`} className="lp-btn lp-btn--yellow" target="_blank" rel="noopener noreferrer">Registra tu local</a>
             </div>
             <div className="lp-pro__mock" aria-hidden="true">
               <div className="lp-pro__bubble">Hoy en Clínica Los Palos Grandes</div>
