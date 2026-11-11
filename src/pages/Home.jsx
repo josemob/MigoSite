@@ -456,17 +456,21 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            {/* Migo IA: mini conversación (solo escritorio, ocupa el hueco de abajo a la derecha) */}
-            <div className="lp-ia lp-card lp-card--glass" aria-label="Ejemplo de conversación con Migo IA">
-              <span className="lp-kicker">Migo IA</span>
-              <div className="lp-ia__chat">
-                <p className="lp-ia__me">Mi perro vomitó dos veces desde anoche y no quiere comer.</p>
-                <div className="lp-ia__bot">
-                  <span className="lp-pill lp-pill--yellow">Gravedad media</span>
-                  <p>Retira la comida por unas horas y ofrécele agua en poca cantidad. Si vuelve a vomitar o lo notas decaído, te conecto con una clínica cerca.</p>
-                </div>
+            {/* Descarga: QR para escanear desde la compu + tiendas (solo escritorio, hueco de abajo a la derecha) */}
+            <div className="lp-dl lp-card lp-card--glass">
+              <span className="lp-kicker">Descarga Migo</span>
+              <div className="lp-dl__row">
+                <img className="lp-dl__qr" src={`${IMG}/qr-migo.svg`} alt="Código QR para descargar Migo" loading="lazy" />
+                <p><b>Llévala en tu teléfono.</b> Escanea el código con la cámara y descárgala gratis.</p>
               </div>
-              <small className="lp-ia__note">Orientación en segundos. No reemplaza al veterinario.</small>
+              <div className="lp-dl__stores">
+                <a href={PLAY} className="lp-store lp-store--play">
+                  <PlayIcon /><span><small>{PLAY_LIVE ? 'Disponible en' : 'Muy pronto en'}</small><strong>Google Play</strong></span>
+                </a>
+                <span className="lp-store lp-store--ios">
+                  <AppleIcon /><span><small>Muy pronto en</small><strong>App Store</strong></span>
+                </span>
+              </div>
             </div>
             <div className="lp-does lp-card">
               <span className="lp-kicker">Qué hace</span>
@@ -586,7 +590,7 @@ export default function Home() {
                 <small>{storeTop} Google Play</small>
               </div>
               <div className="lp-qr">
-                <div className="lp-qr__box">QR</div>
+                <img className="lp-qr__box" src={`${IMG}/qr-migo.svg`} alt="Código QR para descargar Migo" loading="lazy" />
                 <p><strong>¿Estás en la compu?</strong> Escanéalo con tu teléfono.</p>
               </div>
             </div>

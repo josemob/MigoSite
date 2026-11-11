@@ -130,12 +130,15 @@
 .lp-pill--yellow { background: var(--lp-yellow); color: var(--lp-ink); }
 .lp-pill--purple { background: var(--lp-purple); color: #fff; }
 .lp-who li > span:last-child, .lp-does li > span:last-child { font-size: 16px; line-height: 1.5; color: var(--lp-muted); }
-.lp-ia { position: relative; z-index: 1; grid-area: ia; align-self: end; justify-self: end; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
-.lp-ia__chat { display: flex; flex-direction: column; gap: 10px; }
-.lp-ia__me { align-self: flex-end; max-width: 85%; padding: 12px 16px; border-radius: 18px 18px 4px 18px; background: var(--lp-purple); color: #fff; font-size: 15px; line-height: 1.45; }
-.lp-ia__bot { align-self: flex-start; max-width: 92%; padding: 14px 16px; border-radius: 18px 18px 18px 4px; background: #fff; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.lp-ia__bot p { font-size: 15px; line-height: 1.5; color: var(--lp-ink); }
-.lp-ia__note { font-size: 13px; color: var(--lp-muted-2); }
+.lp-dl { position: relative; z-index: 1; grid-area: ia; align-self: end; justify-self: end; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 16px; }
+.lp-dl__row { display: flex; align-items: center; gap: 16px; }
+.lp-dl__qr { width: 104px; height: 104px; flex: none; border-radius: 12px; background: #fff; padding: 6px; }
+.lp-dl__row p { font-size: 15px; line-height: 1.45; color: var(--lp-muted); }
+.lp-dl__row b { color: var(--lp-ink); font-weight: 800; }
+/* Uno debajo del otro: lado a lado no caben y "Google Play" se partía en dos líneas. */
+.lp-dl__stores { display: flex; flex-direction: column; gap: 10px; }
+.lp-dl__stores .lp-store { height: 56px; padding: 0 16px; gap: 12px; border-radius: 14px; }
+.lp-dl__stores .lp-store strong { font-size: 18px; white-space: nowrap; }
 .lp-does { position: relative; z-index: 1; grid-area: cards; align-self: end; max-width: 380px; }
 .lp-does ol { display: flex; flex-direction: column; }
 .lp-does li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; padding: 12px 0; }
@@ -147,7 +150,7 @@
   .lp-showcase { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'text' 'who' 'cards'; min-height: 0; }
   /* En celular el teléfono de esta sección sobra (el hero ya muestra la app). */
   .lp-showcase__phone { display: none; }
-  .lp-ia { display: none; }
+  .lp-dl { display: none; }
   .lp-showcase > div { justify-self: center; text-align: center; }
   /* "Qué hace": lista numerada, se lee mejor alineada a la izquierda. */
   .lp-showcase > .lp-does { text-align: left; }
@@ -261,7 +264,7 @@
 .lp-steps__foot .lp-btn { height: 56px; padding: 0 30px; font-size: 18px; }
 .lp-steps__foot small { font-size: 14px; color: #e7d6ee; }
 .lp-qr { display: flex; gap: 16px; align-items: center; background: #fff; color: var(--lp-text); border-radius: 16px; padding: 12px 20px 12px 12px; }
-.lp-qr__box { width: 96px; height: 96px; border-radius: 8px; background: repeating-linear-gradient(0deg, #f5ebfa 0 8px, #fff 8px 16px); border: 1px solid var(--lp-line); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--lp-purple-600); }
+.lp-qr__box { width: 96px; height: 96px; border-radius: 8px; display: block; }
 .lp-qr p { font-size: 14px; line-height: 1.45; max-width: 18ch; }
 @media (max-width: 1040px) { .lp-steps ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 540px) { .lp-steps ol { grid-template-columns: minmax(0, 1fr); } }
