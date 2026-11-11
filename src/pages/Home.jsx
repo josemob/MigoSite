@@ -456,6 +456,18 @@ export default function Home() {
                 </li>
               </ul>
             </div>
+            {/* Migo IA: mini conversación (solo escritorio, ocupa el hueco de abajo a la derecha) */}
+            <div className="lp-ia lp-card lp-card--glass" aria-label="Ejemplo de conversación con Migo IA">
+              <span className="lp-kicker">Migo IA</span>
+              <div className="lp-ia__chat">
+                <p className="lp-ia__me">Mi perro vomitó dos veces desde anoche y no quiere comer.</p>
+                <div className="lp-ia__bot">
+                  <span className="lp-pill lp-pill--yellow">Gravedad media</span>
+                  <p>Retira la comida por unas horas y ofrécele agua en poca cantidad. Si vuelve a vomitar o lo notas decaído, te conecto con una clínica cerca.</p>
+                </div>
+              </div>
+              <small className="lp-ia__note">Orientación en segundos. No reemplaza al veterinario.</small>
+            </div>
             <div className="lp-does lp-card">
               <span className="lp-kicker">Qué hace</span>
               <ol>

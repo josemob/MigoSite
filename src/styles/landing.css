@@ -109,7 +109,7 @@
 /* ── Qué es Migo (showcase) ───────────────────────────────────────── */
 .lp-showcase-wrap { position: relative; z-index: 1; background: #f4f4f4; }
 .lp-showcase-wrap__inner { max-width: 1440px; margin: 0 auto; padding: clamp(56px, 7vw, 96px) var(--lp-pad); }
-.lp-showcase { position: relative; color: var(--lp-ink); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, auto) minmax(0, 1fr); grid-template-areas: 'text phone who' 'cards phone collar'; gap: 32px clamp(24px, 4vw, 64px); min-height: 720px; }
+.lp-showcase { position: relative; color: var(--lp-ink); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, auto) minmax(0, 1fr); grid-template-areas: 'text phone who' 'cards phone ia'; gap: 32px clamp(24px, 4vw, 64px); min-height: 720px; }
 .lp-paws { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .lp-paws svg { position: absolute; opacity: 0; }
 .lp-showcase__text { position: relative; z-index: 1; grid-area: text; align-self: start; max-width: 320px; }
@@ -130,6 +130,12 @@
 .lp-pill--yellow { background: var(--lp-yellow); color: var(--lp-ink); }
 .lp-pill--purple { background: var(--lp-purple); color: #fff; }
 .lp-who li > span:last-child, .lp-does li > span:last-child { font-size: 16px; line-height: 1.5; color: var(--lp-muted); }
+.lp-ia { position: relative; z-index: 1; grid-area: ia; align-self: end; justify-self: end; width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
+.lp-ia__chat { display: flex; flex-direction: column; gap: 10px; }
+.lp-ia__me { align-self: flex-end; max-width: 85%; padding: 12px 16px; border-radius: 18px 18px 4px 18px; background: var(--lp-purple); color: #fff; font-size: 15px; line-height: 1.45; }
+.lp-ia__bot { align-self: flex-start; max-width: 92%; padding: 14px 16px; border-radius: 18px 18px 18px 4px; background: #fff; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.lp-ia__bot p { font-size: 15px; line-height: 1.5; color: var(--lp-ink); }
+.lp-ia__note { font-size: 13px; color: var(--lp-muted-2); }
 .lp-does { position: relative; z-index: 1; grid-area: cards; align-self: end; max-width: 380px; }
 .lp-does ol { display: flex; flex-direction: column; }
 .lp-does li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 12px; padding: 12px 0; }
@@ -141,6 +147,7 @@
   .lp-showcase { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'text' 'who' 'cards'; min-height: 0; }
   /* En celular el teléfono de esta sección sobra (el hero ya muestra la app). */
   .lp-showcase__phone { display: none; }
+  .lp-ia { display: none; }
   .lp-showcase > div { justify-self: center; text-align: center; }
   /* "Qué hace": lista numerada, se lee mejor alineada a la izquierda. */
   .lp-showcase > .lp-does { text-align: left; }
